@@ -10,6 +10,7 @@ from langchain_community.document_loaders import YoutubeLoader
 from streamlit_extras.colored_header import colored_header
 from streamlit_extras.stylable_container import stylable_container
 import tempfile
+import shutil
 
 # Access open AI key
 OPENAI_API_KEY = st.secrets["OPENAI_API_KEY"]
@@ -134,51 +135,55 @@ def reset_session_state(keys=None):
             if key in st.session_state:
                 del st.session_state[key]
 
-
-# def clear_persistent_data(directory):
-#     """ Remove all files from the specified persistent data directory """
-#     """Ensure no other programs are accessing the files before attempting to delete."""
-#     time.sleep(15)  # Add a delay to ensure any locks or active usage on the files are released
-    
-#     for proc in psutil.process_iter(['pid', 'name']):
-#         try:
-#             files = proc.open_files()
-#             for file in files:
-#                 if directory in file.path:
-#                     print(f"file in use by process: {proc.info} - {file.path}")
-#                     return
-#         except Exception as e:
-#             print(f"Error: {str(e)}")
-            
-#     try:
-#         shutil.rmtree(directory)
-#         os.makedirs(directory)  # Recreate the directory after clearing it
-#         print("Persistent data cleared and directory reset.")
-#     except Exception as e:
-#         print(f"Error clearing persistent data: {str(e)}")
         
-def process_new_video(youtube_url):
+def process_new_video(youtube_url, temp_dir):
     """ Handles loading, splitting, and embedding a new video """
-    
-    with tempfile.TemporaryDirectory() as temp_dir:
-        loader = YoutubeLoader.from_youtube_url(youtube_url)
-        documents = loader.load()
-        text_splitter = RecursiveCharacterTextSplitter(chunk_size=10000, chunk_overlap=200)
-        chunks = text_splitter.split_documents(documents)
-        embeddings = OpenAIEmbeddings()
-        vector_store = Chroma.from_documents(chunks, embeddings, persist_directory=temp_dir)
-        st.session_state['vector_store'] = vector_store
-        llm = ChatOpenAI(model='gpt-3.5-turbo', temperature=.2)
-        retriever = vector_store.as_retriever()
-        crc = ConversationalRetrievalChain.from_llm(llm, retriever)
-        st.session_state['crc'] = crc
+    loader = YoutubeLoader.from_youtube_url(youtube_url)
+    documents = loader.load()
+    text_splitter = RecursiveCharacterTextSplitter(chunk_size=10000, chunk_overlap=200)
+    chunks = text_splitter.split_documents(documents)
+    embeddings = OpenAIEmbeddings()
+    vector_store = Chroma.from_documents(chunks, embeddings, persist_directory=temp_dir)
+    st.session_state['vector_store'] = vector_store
+    llm = ChatOpenAI(model='gpt-3.5-turbo', temperature=.2)
+    retriever = vector_store.as_retriever()
+    crc = ConversationalRetrievalChain.from_llm(llm, retriever)
+    st.session_state['crc'] = crc
 
     return vector_store, crc
+
+def create_temp_directory():
+    """ Create a new temporary directory and return its path """
+    temp_dir = tempfile.mkdtemp()
+    print(f"Created temporary directory at {temp_dir}")
+    return temp_dir
+
+def clear_temp_directory(temp_dir):
+    """ Attempts to clear the temporary directory with retries """
+    max_attempts = 5
+    for attempt in range(max_attempts):
+        try:
+            shutil.rmtree(temp_dir)
+            print(f"Successfully cleared temporary directory at {temp_dir}")
+            return
+        except PermissionError as e:
+            if attempt < max_attempts - 1:
+                print(f"Attempt {attempt + 1} failed to clear directory. Retrying...")
+                time.sleep(0.5)  # Wait for half a second before retrying
+            else:
+                print(f"Failed to clear temporary directory after {max_attempts} attempts.")
+                raise e
+
 
 # Define main function
 def main():
     
     header()
+    
+    
+    if 'temp_dir' not in st.session_state:
+        st.session_state['temp_dir'] = create_temp_directory()
+        
     youtube_url = st.text_input('Input YouTube URL')
     process_video = video_button()
     
@@ -197,13 +202,10 @@ def main():
     #     st.session_state['vector_store'] = []
         
     if process_video and youtube_url:
-        # Clear relevant session state keys for new video processing
-        reset_session_state(keys=['history', 'vector_store', 'crc'])
-        # clear_persistent_data('db2')
-        
-        with st.spinner('reading, chunking, and embedding...'):
-            vector_store, crc = process_new_video(youtube_url)
-            st.success('Video processed and ready for queries.')
+        clear_temp_directory(st.session_state['temp_dir'])  # Clear the old directory
+        st.session_state['temp_dir'] = create_temp_directory()  # Create a new one
+        process_new_video(youtube_url, st.session_state['temp_dir'])
+        st.success('Video processed and ready for queries.')
         
             
     question = st.text_area('Input your question')
@@ -214,7 +216,6 @@ def main():
     with col2:
         if clear_button():
             reset_session_state()
-            # clear_persistent_data('db2')
             st.experimental_rerun()
     
     if submit_question:

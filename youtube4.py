@@ -135,8 +135,7 @@ def reset_session_state(keys=None):
                 del st.session_state[key]
 
 def clear_persistent_data():
-    session = st.report_thread.get_report_ctx().session
-    sesion.clear()
+    st.session_state.clear
 
 # def clear_persistent_data(directory):
 #     """ Remove all files from the specified persistent data directory """
@@ -184,7 +183,7 @@ def main():
     if process_video and youtube_url:
         # Clear relevant session state keys for new video processing
         reset_session_state()
-        clear_persistent_data('db2')
+        clear_persistent_data()
         
         with st.spinner('reading, chunking, and embedding...'):
             loader = YoutubeLoader.from_youtube_url(youtube_url)

@@ -134,14 +134,18 @@ def reset_session_state(keys=None):
             if key in st.session_state:
                 del st.session_state[key]
 
-def clear_persistent_data(directory):
-    """ Remove all files from the specified persistent data directory """
-    try:
-        shutil.rmtree(directory)
-        os.makedirs(directory)  # Recreate the directory after clearing it
-        print("Persistent data cleared and directory reset.")
-    except Exception as e:
-        print(f"Error clearing persistent data: {str(e)}")
+def clear_persistent_data():
+    session = st.report_thread.get_report_ctx().session
+    sesion.clear()
+
+# def clear_persistent_data(directory):
+#     """ Remove all files from the specified persistent data directory """
+#     try:
+#         shutil.rmtree(directory)
+#         os.makedirs(directory)  # Recreate the directory after clearing it
+#         print("Persistent data cleared and directory reset.")
+#     except Exception as e:
+#         print(f"Error clearing persistent data: {str(e)}")
         
 def process_new_video(youtube_url):
     """ Handles loading, splitting, and embedding a new video """
@@ -179,10 +183,30 @@ def main():
         
     if process_video and youtube_url:
         # Clear relevant session state keys for new video processing
-        reset_session_state(keys=['vector_store', 'crc', 'history'])
+        reset_session_state()
         clear_persistent_data('db2')
-        process_new_video(youtube_url)
-        st.success('video processed and ready for queries.')
+        
+        with st.spinner('reading, chunking, and embedding...'):
+            loader = YoutubeLoader.from_youtube_url(youtube_url)
+            documents = loader.load()
+            print(documents)
+            text_splitter = RecursiveCharacterTextSplitter(chunk_size=10000, chunk_overlap=200)
+            chunks = text_splitter.split_documents(documents)
+            embeddings = OpenAIEmbeddings()
+            
+            
+            vector_store = Chroma.from_documents(chunks, embeddings, persist_directory='db2')
+            st.session_state['vector_store'] = vector_store
+            llm = ChatOpenAI(model='gpt-3.5-turbo', temperature=.2)
+            retriever = vector_store.as_retriever()
+            crc = ConversationalRetrievalChain.from_llm(llm, retriever)
+            st.session_state['crc'] = crc
+            st.success('Video processed and ready for queries.')
+        
+        
+        # clear_persistent_data('db2')
+        # process_new_video(youtube_url)
+        # st.success('video processed and ready for queries.')
         
             
     question = st.text_area('Input your question')
@@ -193,12 +217,15 @@ def main():
     with col2:
         if clear_button():
             reset_session_state()
-            st.rerun()
+            clear_persistent_data()
+            # clear_persistent_data('db2')
+            st.experimental_rerun()
     
-    if submit_question and 'crc' in st.session_state:
-        response, updated_history = handle_question(question, st.session_state['crc'], st.session_state['history'])
-        st.session_state['history'] = updated_history
-        display_response(response, updated_history)
+    if submit_question:
+        if 'crc' in st.session_state:
+            response, updated_history = handle_question(question, st.session_state['crc'], st.session_state['history'])
+            st.session_state['history'] = updated_history
+            display_response(response, updated_history)
 
 if __name__== '__main__':
     main()

@@ -16,7 +16,7 @@ OPENAI_API_KEY = st.secrets["OPENAI_API_KEY"]
 
 # Styles Setup  #########################################################################
 
-# Define header size/color
+# Define header size/color:
 
 def header():
     colored_header(

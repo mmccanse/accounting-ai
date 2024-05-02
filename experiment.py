@@ -13,6 +13,7 @@ from langchain.chains import create_history_aware_retriever, create_retrieval_ch
 from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain_core.prompts import PromptTemplate, FewShotPromptTemplate
 from streamlit_extras.stylable_container import stylable_container
+import numpy as np
 import logging
 logging.basicConfig(level=logging.DEBUG)
 
@@ -324,7 +325,7 @@ from langchain import OpenAI
 from langchain.chat_models import ChatOpenAI
 from langchain.text_splitter import RecursiveCharacterTextSplitter 
 from langchain.embeddings.openai import OpenAIEmbeddings
-from langchain.vectorstores import Faiss
+from langchain_community.vectorstores import FAISS
 from langchain.vectorstores import Chroma 
 from langchain.chains import ConversationalRetrievalChain
 from langchain_community.document_loaders import YoutubeLoader
@@ -434,11 +435,6 @@ def question_button_and_style():
     """, unsafe_allow_html=True)
     return submit_question
 
-def handle_question(question, crc, history):
-    response = crc.run({'question': question, 'chat_history': history})
-    history.append((question, response))
-    return response, history
-
 def display_response(response, history):
     st.write(response)
     st.divider()
@@ -457,90 +453,48 @@ def reset_session_state(keys=None):
             if key in st.session_state:
                 del st.session_state[key]
 
-        
-@st.cache_data(show_spinner=True, max_entries=1)
-def process_video_and_create_vector_store(youtube_url):
-    with tempfile.TemporaryDirectory() as temp_dir:
-        loader = YoutubeLoader.from_youtube_url(youtube_url)
-        documents = loader.load()
-        text_splitter = RecursiveCharacterTextSplitter(chunk_size=10000, chunk_overlap=200)
-        chunks = text_splitter.split_documents(documents)
-        embeddings = OpenAIEmbeddings()
-        vector_store = Chroma.from_documents(chunks, embeddings, persist_directory=temp_dir)
-        return vector_store
+            
 
 
-def create_temp_directory():
-    """ Create a new temporary directory and return its path """
-    temp_dir = tempfile.mkdtemp()
-    print(f"Created temporary directory at {temp_dir}")
-    return temp_dir
-
-def clear_temp_directory(temp_dir):
-    """ Attempts to clear the temporary directory with retries """
-    max_attempts = 5
-    for attempt in range(max_attempts):
-        try:
-            shutil.rmtree(temp_dir)
-            print(f"Successfully cleared temporary directory at {temp_dir}")
-            return
-        except PermissionError as e:
-            if attempt < max_attempts - 1:
-                print(f"Attempt {attempt + 1} failed to clear directory. Retrying...")
-                time.sleep(0.5)  # Wait for half a second before retrying
-            else:
-                print(f"Failed to clear temporary directory after {max_attempts} attempts.")
-                raise e
-
-def init_components():
-    embeddings = OpenAIEmbeddings(api_key=OPENAI_API_KEY, model = "text-embedding-ada-002")
-    vector_store = Faiss(embeddings=embeddings)
-    return embeddings, vector_store
-
-def process_video(youtube_url, embeddings, vector_store):
+def process_video(youtube_url):
     loader = YoutubeLoader.from_youtube_url(youtube_url)
     documents = loader.load()
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=10000, chunk_overlap=200)
     chunks = text_splitter.split_documents(documents)
+    if 'embeddings' not in st.session_state:
+        embeddings = OpenAIEmbeddings(api_key=OPENAI_API_KEY, model = "text-embedding-ada-002")
+        st.session_state['embeddings'] = embeddings
+    vector_store = FAISS.from_documents(chunks, embeddings)
     
     # Embed and add documents to the vector store
     for chunk in chunks:
-        embedding = embeddings.embed(chunk.text)
-        vector_store.add_documents([{"text": chunk.text, "embedding": embedding}])
-
-    return "Video processed and vector store updated."
+        embedding = st.session_state['embeddings'].embed_documents(chunk.text)
+        vector_store.add_documents([{"text": chunk.text, "embedding": embedding.numpy()}])
+    return vector_store
 
 # Define main function
 def main():
     with tab2:
-        embeddings, vector_store = init_components()        
-        header()
-        
-        if 'temp_dir' not in st.session_state:
-            st.session_state['temp_dir'] = create_temp_directory()
+        header()       
             
         youtube_url = st.text_input('Input YouTube URL')
-        process_video = video_button()
+        submit_video = video_button()
         
         # Initialize vector_store and crc
         vector_store = st.session_state.get('vector_store')
-        crc = st.session_state.get('crc')
         
         # initialize history
         if 'history' not in st.session_state:
             st.session_state['history'] = []
-        
-        # if 'crc' not in st.session_state:
-        #     st.session_state['crc'] = []
             
         # if 'vector_store' not in st.session_state:
         #     st.session_state['vector_store'] = []
             
-        if process_video and youtube_url:
-            message = process_video(youtube_url, embeddings, vector_store)
-            st.write(message)
+        if submit_video and youtube_url:
+            vector_store = process_video(youtube_url)
+            st.session_state['vector_store'] = vector_store
+            st.success("Video processed and vector store created.")
             
-                
         question = st.text_area('Input your question')
         
         col1, col2 = st.columns(2)
@@ -552,10 +506,12 @@ def main():
                 st.experimental_rerun()
         
         if submit_question:
-            if 'crc' in st.session_state:
-                responses = vector_store.search(question, top_k=5)
-            for response in responses:
-                st.write(response["text"])
+            if 'vectore_store' in st.session_state and 'embeddings' in st.session_state:
+                query_embedding = st.session_state['embeddings'].embed_query(question)
+                query_array = np.array(query_embedding).astype('float32')
+                distances, indices = vector_store.search(query_array, k=5)
+                for idx in indices[0]:  # Assuming you want to display top 5 results
+                    st.write(vector_store.get_document(idx))
                 
                 
 

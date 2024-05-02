@@ -11,7 +11,7 @@ from streamlit_extras.colored_header import colored_header
 from streamlit_extras.stylable_container import stylable_container
 import shutil
 
-# Access open AI key
+# Access open AI key:
 OPENAI_API_KEY = st.secrets["OPENAI_API_KEY"]
 
 # Styles Setup  #########################################################################

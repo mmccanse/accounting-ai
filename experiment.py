@@ -461,14 +461,14 @@ def process_video(youtube_url):
     documents = loader.load()
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=10000, chunk_overlap=200)
     chunks = text_splitter.split_documents(documents)
-    if 'embeddings' not in st.session_state:
-        embeddings = OpenAIEmbeddings(api_key=OPENAI_API_KEY, model = "text-embedding-ada-002")
-        st.session_state['embeddings'] = embeddings
+    # if 'embeddings' not in st.session_state:
+    embeddings = OpenAIEmbeddings(api_key=OPENAI_API_KEY, model = "text-embedding-ada-002")
+        # st.session_state['embeddings'] = embeddings
     vector_store = FAISS.from_documents(chunks, embeddings)
     
     # Embed and add documents to the vector store
     for chunk in chunks:
-        embedding = st.session_state['embeddings'].embed_documents(chunk.text)
+        embedding = st.session_state['embeddings'].embed_documents(chunks)
         vector_store.add_documents([{"text": chunk.text, "embedding": embedding.numpy()}])
     return vector_store
 

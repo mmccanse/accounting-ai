@@ -10,6 +10,8 @@ from langchain_community.document_loaders import YoutubeLoader
 from streamlit_extras.colored_header import colored_header
 from streamlit_extras.stylable_container import stylable_container
 import shutil
+import time
+import psutil
 
 # Access open AI key
 OPENAI_API_KEY = st.secrets["OPENAI_API_KEY"]
@@ -134,11 +136,22 @@ def reset_session_state(keys=None):
             if key in st.session_state:
                 del st.session_state[key]
 
-# def clear_persistent_data():
-#     st.session_state.clear
 
 def clear_persistent_data(directory):
     """ Remove all files from the specified persistent data directory """
+    """Ensure no other programs are accessing the files before attempting to delete."""
+    time.sleep(15)  # Add a delay to ensure any locks or active usage on the files are released
+    
+    for proc in psutil.process_iter(['pid', 'name']):
+        try:
+            files = proc.open_files()
+            for file in files:
+                if directory in file.path:
+                    print(f"file in use by process: {proc.info} - {file.path}")
+                    return
+        except Exception as e:
+            print(f"Error: {str(e)}")
+            
     try:
         shutil.rmtree(directory)
         os.makedirs(directory)  # Recreate the directory after clearing it
@@ -170,15 +183,19 @@ def main():
     youtube_url = st.text_input('Input YouTube URL')
     process_video = video_button()
     
+    # Initialize vector_store and crc
+    vector_store = st.session_state.get('vector_store')
+    crc = st.session_state.get('crc')
+    
     # initialize history
     if 'history' not in st.session_state:
         st.session_state['history'] = []
     
-    if 'crc' not in st.session_state:
-        st.session_state['crc'] = []
+    # if 'crc' not in st.session_state:
+    #     st.session_state['crc'] = []
         
-    if 'vector_store' not in st.session_state:
-        st.session_state['vector_store'] = []
+    # if 'vector_store' not in st.session_state:
+    #     st.session_state['vector_store'] = []
         
     if process_video and youtube_url:
         # Clear relevant session state keys for new video processing
@@ -186,26 +203,8 @@ def main():
         clear_persistent_data('db2')
         
         with st.spinner('reading, chunking, and embedding...'):
-            loader = YoutubeLoader.from_youtube_url(youtube_url)
-            documents = loader.load()
-            print(documents)
-            text_splitter = RecursiveCharacterTextSplitter(chunk_size=10000, chunk_overlap=200)
-            chunks = text_splitter.split_documents(documents)
-            embeddings = OpenAIEmbeddings()
-            
-            
-            vector_store = Chroma.from_documents(chunks, embeddings, persist_directory='db2')
-            st.session_state['vector_store'] = vector_store
-            llm = ChatOpenAI(model='gpt-3.5-turbo', temperature=.2)
-            retriever = vector_store.as_retriever()
-            crc = ConversationalRetrievalChain.from_llm(llm, retriever)
-            st.session_state['crc'] = crc
+            vector_store, crc = process_new_video(youtube_url)
             st.success('Video processed and ready for queries.')
-        
-        
-        # clear_persistent_data('db2')
-        # process_new_video(youtube_url)
-        # st.success('video processed and ready for queries.')
         
             
     question = st.text_area('Input your question')
@@ -215,9 +214,8 @@ def main():
         submit_question = question_button_and_style()
     with col2:
         if clear_button():
-            reset_session_state(keys=['history', 'vector_store', 'crc'])
+            reset_session_state()
             clear_persistent_data('db2')
-            # clear_persistent_data('db2')
             st.experimental_rerun()
     
     if submit_question:

@@ -9,9 +9,7 @@ from langchain.chains import ConversationalRetrievalChain
 from langchain_community.document_loaders import YoutubeLoader
 from streamlit_extras.colored_header import colored_header
 from streamlit_extras.stylable_container import stylable_container
-import shutil
-import time
-import psutil
+import tempfile
 
 # Access open AI key
 OPENAI_API_KEY = st.secrets["OPENAI_API_KEY"]
@@ -137,42 +135,43 @@ def reset_session_state(keys=None):
                 del st.session_state[key]
 
 
-def clear_persistent_data(directory):
-    """ Remove all files from the specified persistent data directory """
-    """Ensure no other programs are accessing the files before attempting to delete."""
-    time.sleep(15)  # Add a delay to ensure any locks or active usage on the files are released
+# def clear_persistent_data(directory):
+#     """ Remove all files from the specified persistent data directory """
+#     """Ensure no other programs are accessing the files before attempting to delete."""
+#     time.sleep(15)  # Add a delay to ensure any locks or active usage on the files are released
     
-    for proc in psutil.process_iter(['pid', 'name']):
-        try:
-            files = proc.open_files()
-            for file in files:
-                if directory in file.path:
-                    print(f"file in use by process: {proc.info} - {file.path}")
-                    return
-        except Exception as e:
-            print(f"Error: {str(e)}")
+#     for proc in psutil.process_iter(['pid', 'name']):
+#         try:
+#             files = proc.open_files()
+#             for file in files:
+#                 if directory in file.path:
+#                     print(f"file in use by process: {proc.info} - {file.path}")
+#                     return
+#         except Exception as e:
+#             print(f"Error: {str(e)}")
             
-    try:
-        shutil.rmtree(directory)
-        os.makedirs(directory)  # Recreate the directory after clearing it
-        print("Persistent data cleared and directory reset.")
-    except Exception as e:
-        print(f"Error clearing persistent data: {str(e)}")
+#     try:
+#         shutil.rmtree(directory)
+#         os.makedirs(directory)  # Recreate the directory after clearing it
+#         print("Persistent data cleared and directory reset.")
+#     except Exception as e:
+#         print(f"Error clearing persistent data: {str(e)}")
         
 def process_new_video(youtube_url):
     """ Handles loading, splitting, and embedding a new video """
     
-    loader = YoutubeLoader.from_youtube_url(youtube_url)
-    documents = loader.load()
-    text_splitter = RecursiveCharacterTextSplitter(chunk_size=10000, chunk_overlap=200)
-    chunks = text_splitter.split_documents(documents)
-    embeddings = OpenAIEmbeddings()
-    vector_store = Chroma.from_documents(chunks, embeddings, persist_directory='db2')
-    st.session_state['vector_store'] = vector_store
-    llm = ChatOpenAI(model='gpt-3.5-turbo', temperature=.2)
-    retriever = vector_store.as_retriever()
-    crc = ConversationalRetrievalChain.from_llm(llm, retriever)
-    st.session_state['crc'] = crc
+    with tempfile.TemporaryDirectory() as temp_dir:
+        loader = YoutubeLoader.from_youtube_url(youtube_url)
+        documents = loader.load()
+        text_splitter = RecursiveCharacterTextSplitter(chunk_size=10000, chunk_overlap=200)
+        chunks = text_splitter.split_documents(documents)
+        embeddings = OpenAIEmbeddings()
+        vector_store = Chroma.from_documents(chunks, embeddings, persist_directory=temp_dir)
+        st.session_state['vector_store'] = vector_store
+        llm = ChatOpenAI(model='gpt-3.5-turbo', temperature=.2)
+        retriever = vector_store.as_retriever()
+        crc = ConversationalRetrievalChain.from_llm(llm, retriever)
+        st.session_state['crc'] = crc
 
     return vector_store, crc
 
@@ -200,7 +199,7 @@ def main():
     if process_video and youtube_url:
         # Clear relevant session state keys for new video processing
         reset_session_state(keys=['history', 'vector_store', 'crc'])
-        clear_persistent_data('db2')
+        # clear_persistent_data('db2')
         
         with st.spinner('reading, chunking, and embedding...'):
             vector_store, crc = process_new_video(youtube_url)
@@ -215,7 +214,7 @@ def main():
     with col2:
         if clear_button():
             reset_session_state()
-            clear_persistent_data('db2')
+            # clear_persistent_data('db2')
             st.experimental_rerun()
     
     if submit_question:

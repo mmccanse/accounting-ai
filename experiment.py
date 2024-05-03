@@ -494,8 +494,8 @@ with tab2:
             submit_question = question_button_and_style()
         with col2:
             if clear_button():
-                youtube_url = ""
-                question = ""
+                youtube_url = st.write("")
+                question = st.write("")
                 reset_session_state()
                 st.experimental_rerun()
         

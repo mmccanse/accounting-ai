@@ -3,7 +3,8 @@ The accounting field is an excellent candidate for AI support; it is rife with r
 
 While the AI landscape is changing so rapidly, it's hard to keep up, and it's hard to know which tools are most effective, or trustworthy. Investing in a major AI tool now, that requires planning and implementation, could result in a tool that is already obsolete or replaced by more effective tools by the time you get it live in your environment. Not to mention security considerations and policies that need to be established.  Companies are struggling to keep up.  But that doesn't mean you can't start dipping your toes in the water and building some AI muscles. 
 
-**Start small, find low-risk pain points, and start tinkering.** This also starts building the infrastructure and experience for teams to think creatively about how to use AI. I created this collection of apps to showcase my skills, and also to help accountants visualize some ways in which small and accessible tools can help save time and effort on your teams.  
+# **Start small, find low-risk pain points, and start tinkering.** 
+This also starts building the infrastructure and experience for teams to think creatively about how to use AI. I created this collection of apps to showcase my skills, and also to help accountants visualize some ways in which small and accessible tools can help save time and effort on your teams.  
 
 The tools I've shared here can be hosted on internal systems, the vector databases can be stored on internal IT infrastructure, and the apps can call internal LLM instances (Llama 3 is now available for download for free), or can access Open AI through enterprise level APIs with enhanced privacy and security commitments.  
 

@@ -193,7 +193,7 @@ def main():
     </style>
     """, unsafe_allow_html=True)
     
-    question = st.text_input('Input your question')
+    question = st.text_input('Ask me questions about the video! For instance: Give me a bulleted list of the main talking points and a summary of each.')
     submit_question = question_button_and_style()
     
     st.markdown(f"**Example questions to try:**")

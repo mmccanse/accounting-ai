@@ -21,7 +21,7 @@ import time
 
 # Access open AI key
 OPENAI_API_KEY = st.secrets["YOUTUBE_OPENAI_API_KEY"]
-openai_embed_model = "text-embedding-3-large"
+openai_embed_model = "text-embedding-ada-002"
 openai_model = "gpt-3.5-turbo-16k"
 llm = ChatOpenAI(api_key=OPENAI_API_KEY, model=openai_model, temperature=0.1)
 
@@ -143,8 +143,14 @@ def reset_session_state(keys=None):
 def process_video(url):
     loader = YoutubeLoader.from_youtube_url(url)
     documents = loader.load()
+    if not documents:
+        st.error("No captions found in video. Please try a different video.")
+        return None
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=10000, chunk_overlap=200)
     chunks = text_splitter.split_documents(documents)
+    if not chunks:
+        st.error("Failed to generate text chunks from the video captions.")
+        return None
     embedding = OpenAIEmbeddings(api_key=OPENAI_API_KEY, model = "text-embedding-ada-002")
     vector_store = FAISS.from_documents(chunks, embedding)
     return vector_store
@@ -200,9 +206,9 @@ def main():
     with st.sidebar:    
         clear_chat_history = vid_clear_button()
         if clear_chat_history:
-            st.session_state['vid_chat_history'] = []
             clear_vid_chat_history()
             reset_session_state()
+            st.rerun()
             
         
         st.subheader(f"**Conversation History**")

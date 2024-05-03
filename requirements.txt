@@ -4,6 +4,7 @@ langchain
 qdrant_client
 openai
 langchain_openai
+langchain-community
 python-dotenv
-
-
+tiktoken
+faiss-cpu

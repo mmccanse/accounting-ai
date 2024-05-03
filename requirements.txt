@@ -8,3 +8,4 @@ langchain-community
 python-dotenv
 tiktoken
 faiss-cpu
+youtube-transcript-api

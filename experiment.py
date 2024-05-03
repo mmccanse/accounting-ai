@@ -19,7 +19,7 @@ import time
 
 
 # Access open AI key
-OPENAI_API_KEY = st.secrets["OPENAI_API_KEY"]
+OPENAI_API_KEY = st.secrets["YOUTUBE_OPENAI_API_KEY"]
 openai_embed_model = "text-embedding-3-large"
 openai_model = "gpt-3.5-turbo-16k"
 llm = ChatOpenAI(api_key=OPENAI_API_KEY, model=openai_model, temperature=0.1)

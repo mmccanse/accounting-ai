@@ -21,7 +21,7 @@ logging.basicConfig(level=logging.DEBUG)
 OPENAI_MODEL = "gpt-3.5-turbo"
 
 # Store API key as a variable
-openai_api_key = st.secrets["OPENAI_API_KEY"]
+openai_api_key = st.secrets["LEASE_OPENAI_API_KEY"]
 
 # Define function to access Qdrant vector store
 def get_vector_store():

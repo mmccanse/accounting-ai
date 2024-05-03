@@ -21,9 +21,6 @@ tab1, tab2 = st.tabs(["Tab 1", "Tab2"])
 
 with tab1:
 
-
-
-
     # Set the model name for LLM
     OPENAI_MODEL = "gpt-3.5-turbo"
 
@@ -321,13 +318,11 @@ with tab1:
 
 import os
 import streamlit as st
-from langchain import OpenAI 
-from langchain.chat_models import ChatOpenAI
+from langchain_openai import OpenAI, ChatOpenAI
 from langchain.text_splitter import RecursiveCharacterTextSplitter 
-from langchain.embeddings.openai import OpenAIEmbeddings
+from langchain_openai import OpenAIEmbeddings
 from langchain_community.vectorstores import FAISS
-from langchain.vectorstores import Chroma 
-from langchain.chains import ConversationalRetrievalChain
+from langchain.chains import RetrievalQA
 from langchain_community.document_loaders import YoutubeLoader
 from streamlit_extras.colored_header import colored_header
 from streamlit_extras.stylable_container import stylable_container
@@ -335,160 +330,157 @@ import tempfile
 import shutil
 import time
 
-# Access open AI key
-OPENAI_API_KEY = st.secrets["OPENAI_API_KEY"]
+with tab2:
+    # Access open AI key
+    OPENAI_API_KEY = st.secrets["OPENAI_API_KEY"]
+    openai_embed_model = "text-embedding-3-large"
+    openai_model = "gpt-3.5-turbo-16k"
+    llm = ChatOpenAI(api_key=OPENAI_API_KEY, model=openai_model, temperature=0.1)
 
-# Styles Setup  #########################################################################
+    # Styles Setup  #########################################################################
 
-# Define header size/color:
+    # Define header size/color:
 
-def header():
-    colored_header(
-        label ="YouTube Chat Assistant",
-        description = "Find a YouTube video with accurate captions. Enter url below.",
-        color_name='light-blue-40'   
-    )
-    # additional styling
-    st.markdown("""
-        <style>
-        /* Adjust the font size of the header */
-        .st-emotion-cache-10trblm.e1nzilvr1 {
-            font-size: 60px !important; /* Change this value to increase or decrease font size
-        }
-        </style>
-    """, unsafe_allow_html=True)
-    st.markdown("""
-        <style>
-        /* Adjust the thickness of the line */
-        hr {
-            height: 16px !important; /* Change this value to increase or decrease line thickness
-        }
-        </style>
-    """, unsafe_allow_html=True)
-    st.markdown("""
-        <style>
-        /* Adjust the font size of the description */
-        div[data-testid="stCaptionContainer"] p {
-            font-size: 20px !important; /* Change this value to increase or decrease font size
-        }
-        </style>
-    """, unsafe_allow_html=True)
+    def header():
+        colored_header(
+            label ="YouTube Chat Assistant",
+            description = "Find a YouTube video with accurate captions. Enter url below.",
+            color_name='light-blue-40'   
+        )
+        # additional styling
+        st.markdown("""
+            <style>
+            /* Adjust the font size of the header */
+            .st-emotion-cache-10trblm.e1nzilvr1 {
+                font-size: 60px !important; /* Change this value to increase or decrease font size
+            }
+            </style>
+        """, unsafe_allow_html=True)
+        st.markdown("""
+            <style>
+            /* Adjust the thickness of the line */
+            hr {
+                height: 16px !important; /* Change this value to increase or decrease line thickness
+            }
+            </style>
+        """, unsafe_allow_html=True)
+        st.markdown("""
+            <style>
+            /* Adjust the font size of the description */
+            div[data-testid="stCaptionContainer"] p {
+                font-size: 20px !important; /* Change this value to increase or decrease font size
+            }
+            </style>
+        """, unsafe_allow_html=True)
 
-# Define button style/formatting
-    
-def video_button():
-    with stylable_container(
-        key="video",
-        css_styles="""
-            button {
-                background-color: #74eeff;
-                color: #000000;
-                border-radius: 20px;
-                }
-                """
-    ) as container:
-        return st.button("Submit video")
+    # Define button style/formatting
+        
+    def video_button():
+        with stylable_container(
+            key="video",
+            css_styles="""
+                button {
+                    background-color: #74eeff;
+                    color: #000000;
+                    border-radius: 20px;
+                    }
+                    """
+        ) as container:
+            return st.button("Submit video")
 
-def question_button():
-    with stylable_container(
-        key="question",
-        css_styles="""
-            button {
-                background-color: #74eeff;
-                color: #000000;
-                border-radius: 20px;
-                }
-                """
-    ) as container:
-        return st.button("Submit question")
+    def question_button():
+        with stylable_container(
+            key="question",
+            css_styles="""
+                button {
+                    background-color: #74eeff;
+                    color: #000000;
+                    border-radius: 20px;
+                    }
+                    """
+        ) as container:
+            return st.button("Submit question")
 
-def clear_button():
-    with stylable_container(
-        key="clear",
-        css_styles="""
-            button {
-                background-color: #74eeff;
-                color: #000000;
-                border-radius: 20px;
-                }
-                """
-    ) as container:
-        return st.button("Clear all")
-    
-# End styles section ###########################################################################
+    def clear_button():
+        with stylable_container(
+            key="clear",
+            css_styles="""
+                button {
+                    background-color: #74eeff;
+                    color: #000000;
+                    border-radius: 20px;
+                    }
+                    """
+        ) as container:
+            return st.button("Clear all")
+        
+    # End styles section ###########################################################################
 
-# Define functions #############################################################################
+    # Define functions #############################################################################
 
-# Define function to clear history
-def clear_history():
-    st.session_state['history'] = []
+    # Define function to clear history
+    def clear_history():
+        st.session_state['history'] = []
 
-def question_button_and_style():
-    submit_question = question_button()
-    st.markdown("""
-        <style>
-        /* Adjust the font size of the input labels */
-        .st-emotion-cache-ue6h4q p {
-        font-size: 20px !important;
-        }
-        </style>
-    """, unsafe_allow_html=True)
-    return submit_question
+    def question_button_and_style():
+        submit_question = question_button()
+        st.markdown("""
+            <style>
+            /* Adjust the font size of the input labels */
+            .st-emotion-cache-ue6h4q p {
+            font-size: 20px !important;
+            }
+            </style>
+        """, unsafe_allow_html=True)
+        return submit_question
 
-def display_response(response, history):
-    st.write(response)
-    st.divider()
-    st.markdown(f"**Conversation History**")
-    for prompts in reversed(history):
-        st.markdown(f"**Question:** {prompts[0]}")
-        st.markdown(f"**Answer:** {prompts[1]}")
-        st.divider()  
+    def display_response(response, history):
+        st.write(response)
+        st.divider()
+        st.markdown(f"**Conversation History**")
+        for prompts in reversed(history):
+            st.markdown(f"**Question:** {prompts[0]}")
+            st.markdown(f"**Answer:** {prompts[1]}")
+            st.divider()  
 
-def reset_session_state(keys=None):
-    """ Reset specific keys in session state or all if keys is None """
-    if keys is None:
-        st.session_state.clear()
-    else:
-        for key in keys:
-            if key in st.session_state:
-                del st.session_state[key]
+    def reset_session_state(keys=None):
+        """ Reset specific keys in session state or all if keys is None """
+        if keys is None:
+            st.session_state.clear()
+        else:
+            for key in keys:
+                if key in st.session_state:
+                    del st.session_state[key]
 
-            
+    def process_video(url):
+        loader = YoutubeLoader.from_youtube_url(url)
+        documents = loader.load()
+        text_splitter = RecursiveCharacterTextSplitter(chunk_size=10000, chunk_overlap=200)
+        chunks = text_splitter.split_documents(documents)
+        embedding = OpenAIEmbeddings(api_key=OPENAI_API_KEY, model = "text-embedding-ada-002")
+        vector_store = FAISS.from_documents(chunks, embedding)
+        return vector_store
 
+    def submit_question(vector_store, question):
+        retriever = vector_store.as_retriever()
+        qa = RetrievalQA.from_chain_type(llm = llm, chain_type='stuff', retriever=retriever)
+        results = qa.invoke(question)
+        return results
 
-def process_video(youtube_url):
-    loader = YoutubeLoader.from_youtube_url(youtube_url)
-    documents = loader.load()
-    text_splitter = RecursiveCharacterTextSplitter(chunk_size=10000, chunk_overlap=200)
-    chunks = text_splitter.split_documents(documents)
-    # if 'embeddings' not in st.session_state:
-    embeddings = OpenAIEmbeddings(api_key=OPENAI_API_KEY, model = "text-embedding-ada-002")
-        # st.session_state['embeddings'] = embeddings
-    vector_store = FAISS.from_documents(chunks, embeddings)
-    
-    # Embed and add documents to the vector store
-    for chunk in chunks:
-        embedding = st.session_state['embeddings'].embed_documents(chunks)
-        vector_store.add_documents([{"text": chunk.text, "embedding": embedding.numpy()}])
-    return vector_store
-
-# Define main function
-def main():
-    with tab2:
+    # Define main function
+    def main():
         header()       
             
         youtube_url = st.text_input('Input YouTube URL')
         submit_video = video_button()
         
         # Initialize vector_store and crc
-        vector_store = st.session_state.get('vector_store')
+        if 'vector_store' not in st.session_state:
+            st.session_state['vector_store'] = []
         
         # initialize history
         if 'history' not in st.session_state:
             st.session_state['history'] = []
-            
-        # if 'vector_store' not in st.session_state:
-        #     st.session_state['vector_store'] = []
             
         if submit_video and youtube_url:
             vector_store = process_video(youtube_url)
@@ -506,12 +498,10 @@ def main():
                 st.experimental_rerun()
         
         if submit_question:
-            if 'vectore_store' in st.session_state and 'embeddings' in st.session_state:
-                query_embedding = st.session_state['embeddings'].embed_query(question)
-                query_array = np.array(query_embedding).astype('float32')
-                distances, indices = vector_store.search(query_array, k=5)
-                for idx in indices[0]:  # Assuming you want to display top 5 results
-                    st.write(vector_store.get_document(idx))
+            answer = submit_question(st.session_state['vector_store'],question)
+            st.write(answer['result'])
+            st.session_state.history.append((question, answer['result']))
+            
                 
                 
 

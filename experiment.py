@@ -497,7 +497,7 @@ with tab2:
                 youtube_url = st.write("")
                 question = st.write("")
                 reset_session_state()
-                st.experimental_rerun()
+                st.rerun()
         
         if submit_question:
             answer = process_question(st.session_state['vector_store'],question)

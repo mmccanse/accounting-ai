@@ -1,8 +1,5 @@
 
 
-# tab1, tab2 = st.tabs(["Lease Assistant", "Video Assistant"])
-
-
 import os
 import streamlit as st
 from langchain_openai import OpenAI, ChatOpenAI
@@ -13,10 +10,6 @@ from langchain.chains import RetrievalQA
 from langchain_community.document_loaders import YoutubeLoader
 from streamlit_extras.colored_header import colored_header
 from streamlit_extras.stylable_container import stylable_container
-import tempfile
-import shutil
-import time
-
 
 
 # Access open AI key
@@ -29,11 +22,13 @@ llm = ChatOpenAI(api_key=OPENAI_API_KEY, model=openai_model, temperature=0.1)
 
 # Define header size/color:
 
+
+
 def header():
     colored_header(
         label ="YouTube Chat Assistant",
         description = "Find a YouTube video with accurate captions. Enter url below.",
-        color_name='light-blue-40'   
+        color_name='blue-80'   
     )
     # additional styling
     st.markdown("""
@@ -68,8 +63,8 @@ def video_button():
         key="video",
         css_styles="""
             button {
-                background-color: #74eeff;
-                color: #000000;
+                background-color: #0068ca;
+                color: #ffffff;
                 border-radius: 20px;
                 }
                 """
@@ -81,8 +76,8 @@ def question_button():
         key="question",
         css_styles="""
             button {
-                background-color: #74eeff;
-                color: #000000;
+                background-color: #0068ca;
+                color: #ffffff;
                 border-radius: 20px;
                 }
                 """
@@ -94,8 +89,8 @@ def vid_clear_button():
         key="clear",
         css_styles="""
             button {
-                background-color: #74eeff;
-                color: #000000;
+                background-color: #0068ca;
+                color: #ffffff;
                 border-radius: 20px;
                 }
                 """
@@ -164,6 +159,7 @@ def process_question(vector_store, question):
 
 # Define main function
 def main():
+    
     header()       
         
     youtube_url = st.text_input('Input YouTube URL')
@@ -183,9 +179,13 @@ def main():
         
         
     if submit_video and youtube_url:
-        vector_store = process_video(youtube_url)
-        st.session_state['vector_store'] = vector_store
-        st.success("Video processed and vector store created.")
+        with st.spinner("loading, chunking, and embedding..."):
+            vector_store = process_video(youtube_url)
+            if vector_store is None:
+                pass
+            else:
+                st.session_state['vector_store'] = vector_store
+                st.success("Video processed and vector store created.")
         
     st.markdown("""
     <style>
@@ -199,9 +199,10 @@ def main():
     submit_question = question_button_and_style()
     
     if submit_question:
-        answer = process_question(st.session_state['vector_store'],question)
-        st.write(answer['result'])
-        st.session_state.vid_chat_history.append((question, answer['result']))
+        with st.spinner("processing..."):
+            answer = process_question(st.session_state['vector_store'],question)
+            st.write(answer['result'])
+            st.session_state.vid_chat_history.append((question, answer['result']))
     
     with st.sidebar:    
         clear_chat_history = vid_clear_button()

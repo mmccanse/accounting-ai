@@ -196,8 +196,9 @@ def main():
     question = st.text_input('Input your question')
     submit_question = question_button_and_style()
     
-    st.write("Example questions to try:")
+    st.markdown(f"**Example questions to try:**")
     st.write("Give me a bulleted list of the main talking points and a summary of each.")
+    st.write("Write step by step instructions for how to do the process in the video.")
     st.divider()
     
     if submit_question:

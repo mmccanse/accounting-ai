@@ -1,4 +1,4 @@
-**#Accounting-AI Proof of Concept Apps:**
+**Accounting-AI Proof of Concept Apps:**
 
 **1. YouTube Chat Assistant:** ingests YouTube videos (with captions) and users can ask questions about the video.
 

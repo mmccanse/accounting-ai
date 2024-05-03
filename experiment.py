@@ -17,7 +17,7 @@ import numpy as np
 import logging
 logging.basicConfig(level=logging.DEBUG)
 
-tab1, tab2 = st.tabs(["Tab 1", "Tab2"])
+tab1, tab2 = st.tabs(["Lease Assistant", "Video Assistant"])
 
 with tab1:
 
@@ -461,7 +461,7 @@ with tab2:
         vector_store = FAISS.from_documents(chunks, embedding)
         return vector_store
 
-    def submit_question(vector_store, question):
+    def process_question(vector_store, question):
         retriever = vector_store.as_retriever()
         qa = RetrievalQA.from_chain_type(llm = llm, chain_type='stuff', retriever=retriever)
         results = qa.invoke(question)
@@ -494,17 +494,19 @@ with tab2:
             submit_question = question_button_and_style()
         with col2:
             if clear_button():
+                youtube_url = ""
+                question = ""
                 reset_session_state()
                 st.experimental_rerun()
         
         if submit_question:
-            answer = submit_question(st.session_state['vector_store'],question)
+            answer = process_question(st.session_state['vector_store'],question)
             st.write(answer['result'])
             st.session_state.history.append((question, answer['result']))
             
                 
                 
 
-if __name__== '__main__':
-    main()
+    if __name__== '__main__':
+        main()
 

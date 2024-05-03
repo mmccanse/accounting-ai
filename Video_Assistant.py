@@ -41,7 +41,7 @@ def header():
         <style>
         /* Adjust the thickness of the line */
         hr {
-            height: 16px !important; /* Change this value to increase or decrease line thickness
+            height: 14px !important; /* Change this value to increase or decrease line thickness
         }
         </style>
     """, unsafe_allow_html=True)

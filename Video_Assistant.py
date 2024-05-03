@@ -18,13 +18,14 @@ import shutil
 import time
 
 
+
 # Access open AI key
 OPENAI_API_KEY = st.secrets["YOUTUBE_OPENAI_API_KEY"]
 openai_embed_model = "text-embedding-3-large"
 openai_model = "gpt-3.5-turbo-16k"
 llm = ChatOpenAI(api_key=OPENAI_API_KEY, model=openai_model, temperature=0.1)
 
-# Styles Setup  #########################################################################
+# Styles Setup  #######################################################################
 
 # Define header size/color:
 
@@ -88,7 +89,7 @@ def question_button():
     ) as container:
         return st.button("Submit question")
 
-def clear_button():
+def vid_clear_button():
     with stylable_container(
         key="clear",
         css_styles="""
@@ -99,15 +100,15 @@ def clear_button():
                 }
                 """
     ) as container:
-        return st.button("Clear all")
+        return st.button("Clear History")
     
 # End styles section ###########################################################################
 
 # Define functions ##########################################################################
 
 # Define function to clear history
-def clear_history():
-    st.session_state['history'] = []
+def clear_vid_chat_history():
+    st.session_state['vid_chat_history'] = []
 
 def question_button_and_style():
     submit_question = question_button()
@@ -121,11 +122,11 @@ def question_button_and_style():
     """, unsafe_allow_html=True)
     return submit_question
 
-def display_response(response, history):
+def display_response(response, vid_chat_history):
     st.write(response)
     st.divider()
     st.markdown(f"**Conversation History**")
-    for prompts in reversed(history):
+    for prompts in reversed(vid_chat_history):
         st.markdown(f"**Question:** {prompts[0]}")
         st.markdown(f"**Answer:** {prompts[1]}")
         st.divider()  
@@ -152,6 +153,8 @@ def process_question(vector_store, question):
     retriever = vector_store.as_retriever()
     qa = RetrievalQA.from_chain_type(llm = llm, chain_type='stuff', retriever=retriever)
     results = qa.invoke(question)
+    st.session_state['question'] = st.session_state['widget']
+    st.session_state['widget'] = ''
     return results
 
 # Define main function
@@ -166,32 +169,41 @@ def main():
         st.session_state['vector_store'] = []
     
     # initialize history
-    if 'history' not in st.session_state:
-        st.session_state['history'] = []
+    if 'vid_chat_history' not in st.session_state:
+        st.session_state['vid_chat_history'] = []
+    
+    # initialize question
+    if 'question' not in st.session_state:
+        st.session_state['question']  =[]
+        
         
     if submit_video and youtube_url:
         vector_store = process_video(youtube_url)
         st.session_state['vector_store'] = vector_store
         st.success("Video processed and vector store created.")
         
-    question = st.text_area('Input your question')
-    
-    col1, col2 = st.columns(2)
-    with col1:
-        submit_question = question_button_and_style()
-    with col2:
-        if clear_button():
-            youtube_url = st.write("")
-            question = st.write("")
-            reset_session_state()
-            st.rerun()
+    question = st.text_area('Input your question', key='widget', on_change=submit)
+    submit_question = question_button_and_style()
     
     if submit_question:
         answer = process_question(st.session_state['vector_store'],question)
         st.write(answer['result'])
-        st.session_state.history.append((question, answer['result']))
+        st.session_state.vid_chat_history.append((question, answer['result']))
+    
+    with st.sidebar:    
+        clear_chat_history = vid_clear_button()
+        if clear_chat_history:
+            st.session_state['vid_chat_history'] = []
+            clear_vid_chat_history()
+            # st.rerun()
         
-            
+        st.subheader(f"**Conversation History**")
+        for idx, (question, answer) in enumerate(reversed(st.session_state.vid_chat_history)):
+            with st.expander(f"Q: {question}"):
+                st.markdown("**Question:**")
+                st.write(question)
+                st.markdown("**Answer:**")
+                st.write(answer)        
             
 
 if __name__== '__main__':

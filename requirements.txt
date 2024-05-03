@@ -1,0 +1,9 @@
+streamlit
+streamlit_extras
+langchain
+qdrant_client
+openai
+langchain_openai
+python-dotenv
+
+

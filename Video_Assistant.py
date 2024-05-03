@@ -197,7 +197,7 @@ def main():
     # st.write("Give me a bulleted list of the main talking points and a summary of each.")
     # st.write("Write step by step instructions for how to do the process in the video.")
     
-    question = st.text_input("Ask me questions about the video!")
+    question = st.text_input("Ask me questions about the video!", placeholder="give me a bulleted list of the main talking points and a summary of each.")
     submit_question = question_button_and_style()
     
 

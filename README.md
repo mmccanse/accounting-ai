@@ -1,4 +1,9 @@
 **Accounting-AI Proof of Concept Apps:**
+The accounting field is an excellent candidate for AI support.  There are numerous repetitive, labor-intensive tasks that are repeated monthly/quarterly/annually.  But where to start? And how do we rely on somethign unknown for such important and sensitive things as financials?
+
+While the AI landscape is changing so rapidly, it's hard to keep up, and it's hard to know which tools are most effective, or trustworthy. And investing in a major AI tool now, that requires planning and implementation, could result in a tool that is already obsolete or replaced by more effective tools by the time you get it live in your environment.  But that doesn't mean you can't start dipping your toes in the water and building some AI muscles. 
+
+Start small, find low-risk pain points, and start tinkering. This also starts building the infrastructure and experience for teams to think creatively about how to use AI. I created this collection of apps to showcase my skills, and also to help accountants visualize some ways in which small and accessible tools can help save time and effort on your teams.  
 
 **1. YouTube Chat Assistant:** ingests YouTube videos (with captions) and users can ask questions about the video.
 

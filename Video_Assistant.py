@@ -196,6 +196,9 @@ def main():
     question = st.text_input('Input your question')
     submit_question = question_button_and_style()
     
+    st.write("some example questions to try:")
+    st.write("Give me a bulleted list of the main talking points and a summary of each.")
+    
     if submit_question:
         with st.spinner("processing..."):
             answer = process_question(st.session_state['vector_store'],question)

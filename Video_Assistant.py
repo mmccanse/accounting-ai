@@ -153,9 +153,8 @@ def process_question(vector_store, question):
     retriever = vector_store.as_retriever()
     qa = RetrievalQA.from_chain_type(llm = llm, chain_type='stuff', retriever=retriever)
     results = qa.invoke(question)
-    st.session_state['question'] = st.session_state['widget']
-    st.session_state['widget'] = ''
     return results
+
 
 # Define main function
 def main():
@@ -182,7 +181,15 @@ def main():
         st.session_state['vector_store'] = vector_store
         st.success("Video processed and vector store created.")
         
-    question = st.text_area('Input your question', key='widget', on_change=submit)
+    st.markdown("""
+    <style>
+    div[data-testid="InputInstructions"] > span:nth-child(1) {
+        visibility: hidden;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+    
+    question = st.text_input('Input your question')
     submit_question = question_button_and_style()
     
     if submit_question:
@@ -195,7 +202,8 @@ def main():
         if clear_chat_history:
             st.session_state['vid_chat_history'] = []
             clear_vid_chat_history()
-            # st.rerun()
+            reset_session_state()
+            
         
         st.subheader(f"**Conversation History**")
         for idx, (question, answer) in enumerate(reversed(st.session_state.vid_chat_history)):

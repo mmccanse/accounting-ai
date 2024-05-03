@@ -33,7 +33,7 @@ def header():
         <style>
         /* Adjust the font size of the header */
         .st-emotion-cache-10trblm.e1nzilvr1 {
-            font-size: 60px !important; /* Change this value to increase or decrease font size
+            font-size: 50px !important; /* Change this value to increase or decrease font size
         }
         </style>
     """, unsafe_allow_html=True)

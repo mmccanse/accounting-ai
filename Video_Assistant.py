@@ -193,9 +193,9 @@ def main():
     </style>
     """, unsafe_allow_html=True)
     
-    st.markdown(f"**Example questions to try:**")
-    st.write("Give me a bulleted list of the main talking points and a summary of each.")
-    st.write("Write step by step instructions for how to do the process in the video.")
+    # st.markdown(f"**Example questions to try:**")
+    # st.write("Give me a bulleted list of the main talking points and a summary of each.")
+    # st.write("Write step by step instructions for how to do the process in the video.")
     
     question = st.text_input("Ask me questions about the video!")
     submit_question = question_button_and_style()

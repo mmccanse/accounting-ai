@@ -22,8 +22,6 @@ llm = ChatOpenAI(api_key=OPENAI_API_KEY, model=openai_model, temperature=0.1)
 
 # Define header size/color:
 
-
-
 def header():
     colored_header(
         label ="YouTube Chat Assistant",

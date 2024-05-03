@@ -290,7 +290,6 @@ def main():
             clear_chat_history = clear_button()
             if clear_chat_history:
                 st.session_state['history'] = []
-                st.session_state['input_value'] = ""
                 
             st.subheader(f"**Conversation History**")
             for idx, (question, answer) in enumerate(reversed(st.session_state.history)):

@@ -9,12 +9,15 @@ This also starts building the infrastructure and experience for teams to think c
 The tools I've shared here can be hosted on internal systems, the vector databases can be stored on internal IT infrastructure, and the apps can call internal LLM instances (Llama 3 is now available for download for free), or can access Open AI through enterprise level APIs with enhanced privacy and security commitments.  
 
 ## **1. YouTube Chat Assistant:** 
-ingests YouTube videos (with captions) and users can ask questions about the video.
+Ingests YouTube videos (with captions). Users can ask both broad and specific questions about the video.
 
    **Potential use cases:**
    - Enter training session video and ask for step-by-step instructions on how to do the processes in the video. Could be used to create SOPs from onboarding training videos.
    - Ask the chatbot to provide a bulleted list of the main talking points with a summary of each - for financial webcasts, or a meeting, that someone might not have time to watch in full, but wants to know the general summary.
    - Walkthroughs with auditors - record the session, then feed it through a chatbot assistant to document steps, or ask follow-up questions if details are forgotten.
+
+  **Example queries:**
+
 
 ### Features
 

@@ -1,5 +1,12 @@
 import streamlit as st
 
+st.set_page_config(page_title=None,
+                   page_icon=":1234:",
+                   layout="centered",
+                   initial_sidebar_state="auto",
+                   menu_items=None)
+
+
 def show_pdf(pdf_url):
     st.markdown(
         f"<iframe src='{pdf_url}' width='130%' height='700' style='border:none; margin-left: -150px;'></iframe>",

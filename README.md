@@ -1,5 +1,5 @@
 # **Accounting-AI proof-of-concept apps:**
-The accounting field is an excellent candidate for AI support; it is rife with repetitive, labor-intensive tasks are performed monthly/quarterly/annually.  But where to start? And how do we rely on something so unknown for such important and sensitive things as financials?
+The accounting field is an excellent candidate for AI support; it is rife with repetitive, labor-intensive tasks that are performed monthly/quarterly/annually.  But where to start? And how do we rely on something so unknown for such important and sensitive things as financials?
 
 While the AI landscape is changing so rapidly, it's hard to keep up, and it's hard to know which tools are most effective, or trustworthy. Investing in a major AI tool now, that requires planning and implementation, could result in a tool that is already obsolete or replaced by more effective tools by the time you get it live in your environment. Not to mention security considerations and policies that need to be established.  Companies are struggling to keep up.  But that doesn't mean you can't start dipping your toes in the water and building some AI muscles. 
 
@@ -66,8 +66,12 @@ Chat assistant trained on lease accounting guidance under ASC 842.
  - **OpenAI's text-embedding-3-large**: To create source content embeddings
  - **Qdrant**: For efficient vector-based document retreival
 
+**Known issues:**
+ - Lease assistant does not handle follow-up questions well. User must currently enter a full question with all necessary context each time question is submitted. This is solvable to allow for follow up questions.
+ - Page references provided are not currently accurate. The source doc page numbers are in the meta data in the vector store. Working on building code to feed in accurate page references.
+ - Some responses do not provide complete information or include hallucinations.  Currently prompt template includes only two example training responses. Working on adding additional training materials to increase accuracy/completeness.
    
-**3. Lease guidance:**
+## **Lease Guidance Pages:** 
    - These are the source docs the lease assistant is referencing. Currently the page number references the assistant provides are not 100% accurate. But that's fixable, the information is in the vector store metadata. Working on finetuning this feature.
 
 ## Getting Started
@@ -80,14 +84,39 @@ To set up the project on your local machine:
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/mmccanse/youtube2.git
+   git clone https://github.com/mmccanse/accounting-ai.git
 
 2. **Navigate to the repository folder:**
    ```bash
-   cd youtube2
+   cd accounting-ai
 
 3. **Install the required dependencies::**
    ```bash
-   pip install 
+   pip install -U langchain-community
+   pip install faiss-cpu
+   pip install langchain
+   pip install langchain-community
+   pip install langchain-openai
+   pip install openai
+   pip install python-dotenv
+   pip install qdrant_client
+   pip install tiktoken
+   pip install streamlit
+   pip install streamlit_extras
+   pip install youtube-transcript-api
 
+## Usage
+
+To run the application:
+
+1. Open a terminal in the project directory.
+2. Start the program by executing:
+   ```bash
+   streamlit run Video_Assistant.py
+ -or-
+1. Open repository in VS code
+2. Right-click on Video_Assistant.py
+3. Open in integrated terminal and execute:
+   ```bash
+   streamlit run Video_Assistant.py
 

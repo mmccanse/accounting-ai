@@ -109,11 +109,11 @@ To run the application:
 2. Start the program by executing:
    ```bash
    streamlit run Video_Assistant.py
-
-   -or-
+ -or-
 1. Open repository in VS code
 2. Right-click on Video_Assistant.py
-3. Open in integrated terminal
-4. streamlit run Video_Assistant.py
+3. Open in integrated terminal and execute:
+   '''bash
+   streamlit run Video_Assistant.py
 
 

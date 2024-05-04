@@ -48,5 +48,24 @@ Chat assistant trained on lease accounting guidance under ASC 842.
    - Not uncommon for accounting team members to need information about a particular accounting topic, but the technical accounting team doesn't have capacity to support. It can require substantial time and effort to find the correct guidance, and find the right topic within the guidance. But, a chat assistant like this could give general information, and provide references, saving people time and effort.
    - This concept could be specialized for many different scenarios: internal company policies, internal accounting memos and procedures, user guides for new implementations and software. It can allow employees to self-serve for basic questions without having to navigate complicated SharePoint repositories.
 
+**Features:**
+
+ - AI driven conversational interface
+ - Trained specifically on technical accounting guidance and instructed to only answer relevant lease accounting relevant questions
+ - Internal prompt includes example responses and instructions for response and reference formatting
+ - Uses gpt-3.5-turbo for generating responses
+ - Embeddings are stored in vector store, enabling rapid searches
+
+**Technologies used:**
+ - **Streamlit**: To create the web interface and community cloud hosting
+ - **LangChain**: Foundational framework connecting OpenAI's models and Qdrant vector storage
+   - **create_history_aware_retriever**
+   - **create_stuff_documents_chain**
+   - **create_retrieval_chain**
+ - **OpenAI's gpt-3.5-turbo**: For natural language understanding and response generation
+ - **OpenAI's text-embedding-3-large**: To create source content embeddings
+ - **Qdrant**: For efficient vector-based document retreival
+
+   
 **3. Lease guidance:**
    - These are the source docs the lease assistant is referencing. Currently the page number references the assistant provides are not 100% accurate. But that's fixable, the information is in the vector store metadata. Am working on finetuning this feature.

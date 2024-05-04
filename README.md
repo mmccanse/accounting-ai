@@ -25,13 +25,13 @@ Ingests YouTube videos (with captions). Users can ask both broad and specific qu
    - For a video of a legislative session: give me a bulleted list of all the bills voted on during the session. Include bill numbers and bill names, what the vote outcome was, and a summary of each bill.
 
 
-### Features
+**Features:**
 
  - AI driven conversational interface
  - Uses gpt-3.5-turbo-16k for generating responses
  - Embeddings are stored in vector store, enabling rapid searches
 
-### Technologies used
+**Technologies used:**
  - **Streamlit**: To create the web interface and community cloud hosting
  - **LangChain**: Foundational framework connecting OpenAI's models and FAISS vector storage
  - **OpenAI's gpt-3.5-turbo-16k**: For natural language understanding and response generation

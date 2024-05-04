@@ -8,13 +8,14 @@ This also starts building the infrastructure and experience for teams to think c
 
 The tools I've shared here can be hosted on internal systems, the vector databases can be stored on internal IT infrastructure, and the apps can call internal LLM instances (Llama 3 is now available for download for free), or can access Open AI through enterprise level APIs with enhanced privacy and security commitments.  
 
-## **1. YouTube Chat Assistant:** 
+## **YouTube Chat Assistant:** 
 Ingests YouTube videos (with captions). Users can ask both broad and specific questions about the video.
 
    **Potential use cases:**
    - Enter training session video and ask for step-by-step instructions on how to do the processes in the video. Could be used to create SOPs from onboarding training videos.
    - Ask the chatbot to provide a bulleted list of the main talking points with a summary of each - for financial webcasts, or a meeting, that someone might not have time to watch in full, but wants to know the general summary.
    - Walkthroughs with auditors - record the session, then feed it through a chatbot assistant to document steps, or ask follow-up questions if details are forgotten.
+   - Train the chatbot on a full repository of onboarding training videos for new hires.  When users ask questions, it provides reponses as well as link to specific video and links to other internal documents with further information.
 
   **Example queries:**
    - Give me a bulleted list of the main talking points with a summary of each.
@@ -37,14 +38,15 @@ Ingests YouTube videos (with captions). Users can ask both broad and specific qu
  - **OpenAI's text-embedding-ada-002**: To create source content embeddings
  - **FAISS**: To store vectors and index them for fast retrieval 
 
-**2. Lease Assistant:** A chat assistant trained on lease accounting guidance under ASC 842.
+## **Lease Assistant:** 
+Chat assistant trained on lease accounting guidance under ASC 842.
 
    **Potential use cases:**
    - Users ask technical accounting questions and receive responses grounded in the guidance with references of where to look for more information.
    - Would it replace the technical accounting team? No.
    - Should it be relied upon to make major accounting decisions? No.
-   - Not uncommon for accounting team members to need information about a particular accounting topic, but the technical accounting team doesn't have capacity to support. It can require substantial time and effort to find the correct guidance, and find the right topic in the guidance. But, a chat assistant like this could give general information, and provide references, saving people time and effort.
+   - Not uncommon for accounting team members to need information about a particular accounting topic, but the technical accounting team doesn't have capacity to support. It can require substantial time and effort to find the correct guidance, and find the right topic within the guidance. But, a chat assistant like this could give general information, and provide references, saving people time and effort.
    - This concept could be specialized for many different scenarios: internal company policies, internal accounting memos and procedures, user guides for new implementations and software. It can allow employees to self-serve for basic questions without having to navigate complicated SharePoint repositories.
 
 **3. Lease guidance:**
-   - These are the source docs the lease assistant is referencing. Currently the page number references the assistant provides are not 100% accurate. But that's definitely fixable, and something I'm working on.
+   - These are the source docs the lease assistant is referencing. Currently the page number references the assistant provides are not 100% accurate. But that's fixable, the information is in the vector store metadata. Am working on finetuning this feature.

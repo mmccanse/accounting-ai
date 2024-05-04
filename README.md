@@ -17,6 +17,11 @@ Ingests YouTube videos (with captions). Users can ask both broad and specific qu
    - Walkthroughs with auditors - record the session, then feed it through a chatbot assistant to document steps, or ask follow-up questions if details are forgotten.
 
   **Example queries:**
+   - Give me a bulleted list of the main talking points with a summary of each.
+   - Provide step-by-step instructions for the process described in the video.
+   - Where in the video did the content about [x] get discusses, the beginning, a quarter of the way through, half way through, 3 quarters of the way through, or at the end? (note, it can't give timestamp data, but can give a general sense of where in the video specific content is)
+   - What is the most important point of the video?
+   - For a video of a legislative session: give me a bulleted list of all the bills voted on during the session. Include bill numbers and bill names, what the vote outcome was, and a summary of each bill.
 
 
 ### Features

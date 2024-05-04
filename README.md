@@ -48,6 +48,12 @@ Chat assistant trained on lease accounting guidance under ASC 842.
    - Not uncommon for accounting team members to need information about a particular accounting topic, but the technical accounting team doesn't have capacity to support. It can require substantial time and effort to find the correct guidance, and find the right topic within the guidance. But, a chat assistant like this could give general information, and provide references, saving people time and effort.
    - This concept could be specialized for many different scenarios: internal company policies, internal accounting memos and procedures, user guides for new implementations and software. It can allow employees to self-serve for basic questions without having to navigate complicated SharePoint repositories.
 
+  **Example queries:**
+   - What are lease components and nonlease components, and how are they identified?
+   - What are the journal entries required to account for a lease for lessees and lessors?
+   - What are the steps required in considering a lease modification?
+   - I don't understand what a sales-type lease is, can you help me understand and explain it like I'm a child?
+
 **Features:**
 
  - AI driven conversational interface

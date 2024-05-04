@@ -80,14 +80,40 @@ To set up the project on your local machine:
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/mmccanse/youtube2.git
+   git clone https://github.com/mmccanse/accounting-ai.git
 
 2. **Navigate to the repository folder:**
    ```bash
-   cd youtube2
+   cd accounting-ai
 
 3. **Install the required dependencies::**
    ```bash
-   pip install 
+   pip install -U langchain-community
+   pip install faiss-cpu
+   pip install langchain
+   pip install langchain-community
+   pip install langchain-openai
+   pip install openai
+   pip install python-dotenv
+   pip install qdrant_client
+   pip install tiktoken
+   pip install streamlit
+   pip install streamlit_extras
+   pip install youtube-transcript-api
+
+## Usage
+
+To run the application:
+
+1. Open a terminal in the project directory.
+2. Start the program by executing:
+   ```bash
+   streamlit run Video_Assistant.py
+
+   -or-
+1. Open repository in VS code
+2. Right-click on Video_Assistant.py
+3. Open in integrated terminal
+4. streamlit run Video_Assistant.py
 
 

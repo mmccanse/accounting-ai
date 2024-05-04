@@ -116,6 +116,3 @@ To run the application:
    ```bash
    streamlit run Video_Assistant.py
 
-   
-
-

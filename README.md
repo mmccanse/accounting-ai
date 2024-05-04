@@ -66,6 +66,10 @@ Chat assistant trained on lease accounting guidance under ASC 842.
  - **OpenAI's text-embedding-3-large**: To create source content embeddings
  - **Qdrant**: For efficient vector-based document retreival
 
+**Known issues:**
+ - Lease assistant does not handle follow-up questions well. User must currently enter a full question with all necessary context each time question is submitted. This is solvable to allow for follow up questions.
+ - Page references provided are not currently accurate. The source doc page numbers are in the meta data in the vector store. Working on building code to feed in accurate page references.
+ - Some responses do not provide complete information or include hallucinations.  Currently prompt template includes only two example training responses. Working on adding additional training materials to increase accuracy/completeness.
    
 **3. Lease guidance:**
    - These are the source docs the lease assistant is referencing. Currently the page number references the assistant provides are not 100% accurate. But that's fixable, the information is in the vector store metadata. Working on finetuning this feature.

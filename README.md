@@ -68,4 +68,25 @@ Chat assistant trained on lease accounting guidance under ASC 842.
 
    
 **3. Lease guidance:**
-   - These are the source docs the lease assistant is referencing. Currently the page number references the assistant provides are not 100% accurate. But that's fixable, the information is in the vector store metadata. Am working on finetuning this feature.
+   - These are the source docs the lease assistant is referencing. Currently the page number references the assistant provides are not 100% accurate. But that's fixable, the information is in the vector store metadata. Working on finetuning this feature.
+
+## Getting Started
+
+### Prerequisites
+**Python:** Version 3.11 or newer is required. This application has been tested on Python 3.11.5. Make sure your Python version is up-to-date to avoid compatibility issues.
+
+### Installation
+To set up the project on your local machine:
+
+1. **Clone the repository:**
+   ```bash
+   git clone https://
+
+2. **Navigate to the repository folder:**
+   ```bash
+   cd final_project_bootcamp
+
+3. **Install the required dependencies::**
+   ```bash
+
+

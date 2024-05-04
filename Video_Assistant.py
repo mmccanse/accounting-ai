@@ -11,6 +11,12 @@ from langchain_community.document_loaders import YoutubeLoader
 from streamlit_extras.colored_header import colored_header
 from streamlit_extras.stylable_container import stylable_container
 
+# Set up Streamlit page configuration
+st.set_page_config(page_title=None,
+                   page_icon=":cyclone:",
+                   layout="wide",
+                   initial_sidebar_state="auto",
+                   menu_items=None)
 
 # Access open AI key
 OPENAI_API_KEY = st.secrets["YOUTUBE_OPENAI_API_KEY"]
@@ -159,74 +165,107 @@ def process_question(vector_store, question):
 def main():
     
     header()       
-        
-    youtube_url = st.text_input('Input YouTube URL')
-    submit_video = video_button()
+    tab1, tab2 = st.tabs(["The App", "Accounting Use Cases"])
     
-    # Initialize vector_store and crc
-    if 'vector_store' not in st.session_state:
-        st.session_state['vector_store'] = []
-    
-    # initialize history
-    if 'vid_chat_history' not in st.session_state:
-        st.session_state['vid_chat_history'] = []
-    
-    # initialize question
-    if 'question' not in st.session_state:
-        st.session_state['question']  =[]
-        
-        
-    if submit_video and youtube_url:
-        with st.spinner("loading, chunking, and embedding..."):
-            vector_store = process_video(youtube_url)
-            if vector_store is None:
-                pass
-            else:
-                st.session_state['vector_store'] = vector_store
-                st.success("Video processed and vector store created.")
-        
-    st.markdown("""
-    <style>
-    div[data-testid="InputInstructions"] > span:nth-child(1) {
-        visibility: hidden;
-    }
-    </style>
-    """, unsafe_allow_html=True)
-    
-    # st.markdown(f"**Example questions to try:**")
-    # st.write("Give me a bulleted list of the main talking points and a summary of each.")
-    # st.write("Write step by step instructions for how to do the process in the video.")
-    
-    question = st.text_input("Ask me questions about the video!", placeholder="give me a bulleted list of the main talking points and a summary of each.")
-    submit_question = question_button_and_style()
-    
+    with tab2:
+        st.subheader("proof of concept")
+        st.write("""Accountants use videos for numerous scenarios: recorded zoom trainings, onboardings, walkthroughs, meetings. But information in videos is
+                 hard to access for repeated viewings, especially if the user only needs to revisit part of the content. This app ingests the transcript generated
+                 from the captions and can answer questions or transform the video content to a useable format.""")
+        st.markdown("**Examples:**")
+        st.write("""
+   - Create SOP from training video. Enter training video and ask for step-by-step instructions. 
+   \n- \tGenerate quick summary of meeting or webcast that couldn't attend, but need the highlights.
+   - Walkthroughs with auditors. Record the session with captioning, then feed it through a chatbot assistant to document steps, or ask follow-up questions if details are forgotten.
+   - Train the chatbot on a full repository of onboarding training videos for new hires.  When users ask questions, it provides reponses, links to specific videos, and links to other internal documents with further information.
+   - Empower team members to self-serve support for systems/processes/policies.
 
-    st.divider()
-    
-    if submit_question:
-        with st.spinner("processing..."):
-            answer = process_question(st.session_state['vector_store'],question)
-            st.markdown(f"**Question:** ")
-            st.write(answer['query'])
-            st.markdown(f"**Response:** ")
-            st.write(answer['result'])
-            st.session_state.vid_chat_history.append((question, answer['result']))
-    
-    with st.sidebar:    
-        clear_chat_history = vid_clear_button()
-        if clear_chat_history:
-            clear_vid_chat_history()
-            reset_session_state()
-            st.rerun()
-            
+  **Example queries:**
+   - Give me a bulleted list of the main talking points with a summary of each.
+   - Provide step-by-step instructions for the process described in the video.
+   - At what points in the video is 'xyz topic' mentioned? 
+   - What is the most important point of the video?
+
+
+**Features:**
+
+ - AI driven conversational interface
+ - Uses gpt-3.5-turbo-16k for generating responses
+ - Embeddings are stored in vector store, enabling rapid searches
+
+**Technologies used:**
+ - **Streamlit**: To create the web interface and community cloud hosting
+ - **LangChain**: Foundational framework connecting OpenAI's models and FAISS vector storage
+ - **OpenAI's gpt-3.5-turbo-16k**: For natural language understanding and response generation
+ - **OpenAI's text-embedding-ada-002**: To create source content embeddings
+ - **FAISS**: To store vectors and index them for fast retrieval""")
         
-        st.subheader(f"**Conversation History**")
-        for idx, (question, answer) in enumerate(reversed(st.session_state.vid_chat_history)):
-            with st.expander(f"Q: {question}"):
-                st.markdown("**Question:**")
-                st.write(question)
-                st.markdown("**Answer:**")
-                st.write(answer)        
+    with tab1:
+            
+        youtube_url = st.text_input('Input YouTube URL')
+        submit_video = video_button()
+        
+        # Initialize vector_store and crc
+        if 'vector_store' not in st.session_state:
+            st.session_state['vector_store'] = []
+        
+        # initialize history
+        if 'vid_chat_history' not in st.session_state:
+            st.session_state['vid_chat_history'] = []
+        
+        # initialize question
+        if 'question' not in st.session_state:
+            st.session_state['question']  =[]
+            
+            
+        if submit_video and youtube_url:
+            with st.spinner("loading, chunking, and embedding..."):
+                vector_store = process_video(youtube_url)
+                if vector_store is None:
+                    pass
+                else:
+                    st.session_state['vector_store'] = vector_store
+                    st.success("Video processed and vector store created.")
+            
+        st.markdown("""
+        <style>
+        div[data-testid="InputInstructions"] > span:nth-child(1) {
+            visibility: hidden;
+        }
+        </style>
+        """, unsafe_allow_html=True)
+
+        
+        question = st.text_input("Ask me questions about the video!", placeholder="give me a bulleted list of the main talking points and a summary of each.")
+        submit_question = question_button_and_style()
+        
+
+        st.divider()
+        
+        if submit_question:
+            with st.spinner("processing..."):
+                answer = process_question(st.session_state['vector_store'],question)
+                st.markdown(f"**Question:** ")
+                st.write(answer['query'])
+                st.markdown(f"**Response:** ")
+                st.write(answer['result'])
+                st.session_state.vid_chat_history.append((question, answer['result']))
+        
+        with st.sidebar:    
+            clear_chat_history = vid_clear_button()
+            if clear_chat_history:
+                clear_vid_chat_history()
+                reset_session_state()
+                st.rerun()
+                
+            
+            st.subheader(f"**Conversation History**")
+            for idx, (question, answer) in enumerate(reversed(st.session_state.vid_chat_history)):
+                with st.expander(f"Q: {question}"):
+                    st.markdown("**Question:**")
+                    st.write(question)
+                    st.markdown("**Answer:**")
+                    st.write(answer)        
             
 
 if __name__== '__main__':

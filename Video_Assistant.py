@@ -14,7 +14,7 @@ from streamlit_extras.stylable_container import stylable_container
 # Set up Streamlit page configuration
 st.set_page_config(page_title=None,
                    page_icon=":cyclone:",
-                   layout="wide",
+                   layout="centered",
                    initial_sidebar_state="auto",
                    menu_items=None)
 
@@ -238,9 +238,7 @@ def main():
         
         question = st.text_input("Ask me questions about the video!", placeholder="give me a bulleted list of the main talking points and a summary of each.")
         submit_question = question_button_and_style()
-        
-
-        st.divider()
+        # st.divider()
         
         if submit_question:
             with st.spinner("processing..."):

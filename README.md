@@ -1,5 +1,5 @@
 # **Accounting-AI proof-of-concept apps:**
-The accounting field is an excellent candidate for AI support; it is rife with repetitive, labor-intensive tasks are performed monthly/quarterly/annually.  But where to start? And how do we rely on something so unknown for such important and sensitive things as financials?
+The accounting field is an excellent candidate for AI support; it is rife with repetitive, labor-intensive tasks that are performed monthly/quarterly/annually.  But where to start? And how do we rely on something so unknown for such important and sensitive things as financials?
 
 While the AI landscape is changing so rapidly, it's hard to keep up, and it's hard to know which tools are most effective, or trustworthy. Investing in a major AI tool now, that requires planning and implementation, could result in a tool that is already obsolete or replaced by more effective tools by the time you get it live in your environment. Not to mention security considerations and policies that need to be established.  Companies are struggling to keep up.  But that doesn't mean you can't start dipping your toes in the water and building some AI muscles. 
 

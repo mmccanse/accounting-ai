@@ -80,13 +80,14 @@ To set up the project on your local machine:
 
 1. **Clone the repository:**
    ```bash
-   git clone https://
+   git clone https://github.com/mmccanse/youtube2.git
 
 2. **Navigate to the repository folder:**
    ```bash
-   cd final_project_bootcamp
+   cd youtube2
 
 3. **Install the required dependencies::**
    ```bash
+   pip install 
 
 

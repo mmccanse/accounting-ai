@@ -447,7 +447,7 @@ def main():
     
     with tab1:
         st.write('This is a retrieval-assisted chatbot for lease accounting under US GAAP.')
-        st.markdown(f"**Disclaimer:** This assistant cannot give specific accounting advice. It is a learning tool and proof of concept. It is not intended for commercial use. PLease note that page number references provided in the response are not currently accurate. For accounting advice, please consult an appropriate professional.")
+        st.markdown(f"**Disclaimer:** This assistant cannot give specific accounting advice. It is a learning tool and proof of concept. It is not intended for commercial use. Please note that page number references provided in the response are not currently accurate. For accounting advice, please consult an appropriate professional.")
 
         st.divider()
         

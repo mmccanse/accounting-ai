@@ -98,13 +98,7 @@ You will use the provided examples for guidance on how to construct your respons
 For lessees, lease components are elements of the arrangement that provide the lessee with the right to use an identified asset. The right to use an underlying asset is considered a separate lease component if the lessee can benefit from the asset either on its own or together with other readily available resources, and if the asset is not highly dependent on or highly interrelated with other assets in the contract. This determination is crucial in allocating consideration between lease and nonlease components.
 For lessors, the process is similar but with some differences. Lessors must allocate any capitalized costs, such as initial direct costs or contract costs, to the separate lease components or nonlease components to which those costs relate. Lessors also have the option to elect a practical expedient where they can choose not to separate nonlease components from lease components and account for them as a single component under certain conditions.
 To provide a comprehensive understanding, let's look at an example from the KPMG Leases Handbook:
-Example: A lessor enters into a lease contract with a lessee for the use of equipment. The contract includes maintenance services as a nonlease component. The lessor must identify the separate lease component (equipment) and nonlease component (maintenance services) and allocate consideration accordingly. If the maintenance services are considered a predominant component, the lessor may account for them under Topic 606. Otherwise, the lessor would account for the combined component as an operating lease under ASC 842.
-
-            References: 
-            KPMG Leases Handbook, page 151
-            PWC Leases Guide, pages 47 - 72
-            EY Financial Reporting Developments Lease Accounting, pages 41 - 73
-            ASC: 842-10-15-28 to 842-10-15-42"""
+Example: A lessor enters into a lease contract with a lessee for the use of equipment. The contract includes maintenance services as a nonlease component. The lessor must identify the separate lease component (equipment) and nonlease component (maintenance services) and allocate consideration accordingly. If the maintenance services are considered a predominant component, the lessor may account for them under Topic 606. Otherwise, the lessor would account for the combined component as an operating lease under ASC 842."""
 
         },
         {
@@ -116,21 +110,12 @@ For lessees, when a lease modification occurs, the lessee must assess whether th
 If the modification does not result in a separate lease, the lessee will need to remeasure the lease liability and adjust the right-of-use asset based on the remaining consideration in the contract. The lessee must also reassess the lease classification at the modification effective date and account for any initial direct costs, lease incentives, and other payments made to or by the lessee in connection with the modification.
 
 Overall, the accounting treatment for lease modifications for lessees involves careful consideration of the impact on the financial statements and compliance with ASC 842 requirements.
-References:
-•	EY Financial Reporting Developments Lease Accounting, pages 204-226
-•	PWC Leases Guide, pages 182 - 225 
-•	KPMG Leases Handbook, pages 567 - 609
-•	ASC 842-10-25-8 to 25-14, 842-10-35-3 to 35-6
+
 
 For lessors, accounting for lease modifications involves several steps and considerations. When a lease modification occurs, the lessor must first determine if the modified contract is still considered a lease or contains a lease. If it does, the lessor needs to assess whether the modification results in a separate contract or not.
 If the modification results in a separate contract, the lessor will account for two separate contracts: the unmodified original contract and the new separate contract. The new separate contract is accounted for in the same manner as any other new lease. This means that the lessor will recognize any selling profit or loss on the modified lease based on the fair value of the underlying asset at the effective date of the modification.
 On the other hand, if the modification does not result in a separate contract, the lessor will need to remeasure and reallocate the remaining consideration in the contract. The lessor must also reassess the lease classification at the modification effective date and account for any initial direct costs, lease incentives, and other payments made to or by the lessor in connection with the modification.
-The accounting treatment for lease modifications will vary depending on whether the lease classification changes and how it changes. It is essential for lessors to carefully evaluate each modification to ensure compliance with ASC 842 guidelines.
-References:
-•	EY - Financial Reporting Developments: Lease Accounting, pages 281-298
-•	PWC - Leases Guide, pages 226 - 241
-•	KPMG - Leases Handbook, pages 709 - 735
-•	ASC: 842-10-25-8 to 25-18, 842-10-35-3 to 35-6, 842-10-55-190 to 55-209"""
+The accounting treatment for lease modifications will vary depending on whether the lease classification changes and how it changes. It is essential for lessors to carefully evaluate each modification to ensure compliance with ASC 842 guidelines."""
 
         }
     ]

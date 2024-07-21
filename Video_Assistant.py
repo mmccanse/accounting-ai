@@ -21,7 +21,7 @@ st.set_page_config(page_title=None,
 # Access open AI key
 OPENAI_API_KEY = st.secrets["YOUTUBE_OPENAI_API_KEY"]
 openai_embed_model = "text-embedding-ada-002"
-openai_model = "gpt-3.5-turbo-16k"
+openai_model = "gpt-4o-mini"
 llm = ChatOpenAI(api_key=OPENAI_API_KEY, model=openai_model, temperature=0.1)
 
 # Styles Setup  #######################################################################
@@ -190,13 +190,13 @@ def main():
 **Features:**
 
  - AI driven conversational interface
- - Uses gpt-3.5-turbo-16k for generating responses
+ - Uses gpt-4o-mini for generating responses
  - Embeddings are stored in vector store, enabling rapid searches
 
 **Technologies used:**
  - **Streamlit**: To create the web interface and community cloud hosting
  - **LangChain**: Foundational framework connecting OpenAI's models and FAISS vector storage
- - **OpenAI's gpt-3.5-turbo-16k**: For natural language understanding and response generation
+ - **OpenAI's gpt-4o-mini**: For natural language understanding and response generation
  - **OpenAI's text-embedding-ada-002**: To create source content embeddings
  - **FAISS**: To store vectors and index them for fast retrieval""")
         

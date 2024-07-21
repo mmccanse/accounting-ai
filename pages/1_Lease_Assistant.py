@@ -24,7 +24,7 @@ st.set_page_config(page_title=None,
                    menu_items=None)
 
 # Set the model name for LLM
-OPENAI_MODEL = "gpt-3.5-turbo"
+OPENAI_MODEL = "gpt-4o-mini"
 
 # Store API key as a variable
 openai_api_key = st.secrets["LEASE_OPENAI_API_KEY"]
@@ -425,7 +425,7 @@ def main():
   - AI driven conversational interface
   - Trained specifically on technical accounting guidance and instructed to only answer relevant lease accounting relevant questions
   - Internal prompt includes example responses and instructions for response and reference formatting
-  - Uses gpt-3.5-turbo for generating responses
+  - Uses gpt-4o-mini for generating responses
   - Embeddings are stored in vector store, enabling rapid searches
 
 **Technologies used:**
@@ -434,7 +434,7 @@ def main():
    - **create_history_aware_retriever**
    - **create_stuff_documents_chain**
    - **create_retrieval_chain**
- - **OpenAI's gpt-3.5-turbo**: For natural language understanding and response generation
+ - **OpenAI's gpt-4o-mini**: For natural language understanding and response generation
  - **OpenAI's text-embedding-3-large**: To create source content embeddings
  - **Qdrant**: For efficient vector-based document retreival
 

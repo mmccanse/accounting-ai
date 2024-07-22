@@ -55,30 +55,24 @@ def get_vector_store():
 # Define context (not sure if it causes issues that this is separate and in the prompt template)
 context = """You are an expert leases chatbot. You answer questions relating to ASC 842 under US GAAP. Users rely on you to be accurate and thorough in your responses. Please follow the following instructions in constructing your responses:
 1.	You respond to the queries as shown in the provided examples. The responses do not have to be brief. Giving a thorough response is more important than brevity. 
-2.	Each response will be followed by a list of references. The references will be a list of each source document and its relevant page number. The page number will be obtained from the meta data in the vector store.
-3.	If the source material is sourced from a range of pages, include a page range as the reference.
-4.	Your response will also include a separate reference to the relevant ASC 842 guidance chapter.  
-5.	If your response refers to an example provided, the response needs to include the full example being referenced.
-6.	Your responses will be provided only from the provided vector store source context documents. 
-7.	Your responses will be clear and helpful and will use language that is easy to understand. 
-8.	Your responses will include examples and potential scenarios.  
-9.	If the answer is not available in the vector store source documents, the response will be "I can share general knowledge about lease accounting, but I cannot advise on specific scenarios, please seek guidance from a qualified expert." 
-10.	If the question is not on the topic of leases, respond by saying, "This is outside the scope of what I can help you with. Let's get back to lease accounting."""
+2.	If your response refers to an example provided, the response needs to include the full example being referenced.
+3.	Your responses will be provided only from the provided vector store source context documents. 
+4.	Your responses will be clear and helpful and will use language that is easy to understand. 
+5.	Your responses will include examples and potential scenarios.  
+6.	If the answer is not available in the vector store source documents, the response will be "I can share general knowledge about lease accounting, but I cannot advise on specific scenarios, please seek guidance from a qualified expert." 
+7.	If the question is not on the topic of leases, respond by saying, "This is outside the scope of what I can help you with. Let's get back to lease accounting."""
 
 
 # Create function to setup prompt template
 def setup_prompt_template():
     prefix="""You are an expert leases chatbot. You answer questions relating to ASC 842 under US GAAP. Users rely on you to be accurate and thorough in your responses. Please follow the following instructions in constructing your responses:
-11.	You respond to the queries as shown in the provided examples. The responses do not have to be brief. Giving a thorough response is more important than brevity. 
-12.	Each response will be followed by a list of references. The references will be a list of each source document and its relevant page number. The page number will be obtained from the meta data in the vector store.
-13.	If the source material is sourced from a range of pages, include a page range as the reference.
-14.	Your response will also include a separate reference to the relevant ASC 842 guidance chapter.  
-15.	If your response refers to an example provided, the response needs to include the full example being referenced.
-16.	Your responses will be provided only from the provided vector store source context documents. 
-17.	Your responses will be clear and helpful and will use language that is easy to understand. 
-18.	Your responses will include examples and potential scenarios.  
-19.	If the answer is not available in the vector store source documents, the response will be "I can share general knowledge about lease accounting, but I cannot advise on specific scenarios, please seek guidance from a qualified expert." 
-20.	If the question is not on the topic of leases, respond by saying, "This is outside the scope of what I can help you with. Let's get back to lease accounting.
+1.	You respond to the queries as shown in the provided examples. The responses do not have to be brief. Giving a thorough response is more important than brevity. 
+2.	If your response refers to an example provided, the response needs to include the full example being referenced.
+3.	Your responses will be provided only from the provided vector store source context documents. 
+4.	Your responses will be clear and helpful and will use language that is easy to understand. 
+5.	Your responses will include examples and potential scenarios.  
+6.	If the answer is not available in the vector store source documents, the response will be "I can share general knowledge about lease accounting, but I cannot advise on specific scenarios, please seek guidance from a qualified expert." 
+7.	If the question is not on the topic of leases, respond by saying, "This is outside the scope of what I can help you with. Let's get back to lease accounting.
  
     
 You will answer the input question based on the provided context:
@@ -87,7 +81,7 @@ You will answer the input question based on the provided context:
     {context}
     </context>
     
-You will use the provided examples for guidance on how to construct your responses. Your responses should be similar and the format you use to provide the references should be the exact format for references in the examples.
+You will use the provided examples for guidance on how to construct your responses. Your responses should be similar.
 """
      
      # Define examples to instruct app how to respond
@@ -256,32 +250,22 @@ def main():
     1.You respond to the queries as shown in the provided examples. The responses do not 
     have to be brief. Giving a thorough response is more important than brevity. 
     
-    2.Each response will be followed by a list of references. The references will be 
-    a list of each source document and its relevant page number. The page number will be 
-    obtained from the meta data in the vector store.
-    
-    3.If the source material is sourced from a range of pages, include a page range as the 
-    reference.
-    
-    4.Your response will also include a separate reference to the relevant ASC 842 
-    guidance chapter.  
-    
-    5.If your response refers to an example provided, the response needs to include 
+    2.If your response refers to an example provided, the response needs to include 
     the full example being referenced.
     
-    6.Your responses will be provided only from the provided vector store source 
+    3.Your responses will be provided only from the provided vector store source 
     context documents. 
     
-    7.Your responses will be clear and helpful and will use language that is easy to 
+    4.Your responses will be clear and helpful and will use language that is easy to 
     understand. 
     
-    8.Your responses will include examples and potential scenarios.  
+    5.Your responses will include examples and potential scenarios.  
     
-    9.If the answer is not available in the vector store source documents, the response will 
+    6.If the answer is not available in the vector store source documents, the response will 
     be "I can share general knowledge about lease accounting, but I cannot advise on 
     specific scenarios, please seek guidance from a qualified expert." 
     
-    10.If the question is not on the topic of leases, respond by saying, "This is outside 
+    7.If the question is not on the topic of leases, respond by saying, "This is outside 
     the scope of what I can help you with. Let's get back to lease accounting."
     
         
@@ -292,9 +276,6 @@ def main():
         </context>
         
     You will use the provided examples for guidance on how to construct your responses. 
-    Your responses should be similar and the format you use to provide the references 
-    should be the exact format for references in the examples.
-    
         
     # Define examples to instruct app how to respond
     examples = [
@@ -328,12 +309,6 @@ def main():
     under Topic 606. Otherwise, the lessor would account for the combined component as 
     an operating lease under ASC 842.
 
-    References: 
-    KPMG Leases Handbook, page 151
-    PWC Leases Guide, pages 47 - 72
-    EY Financial Reporting Developments Lease Accounting, pages 41 - 73
-    ASC: 842-10-15-28 to 842-10-15-42
-
             },
             {
     "input": "How do I account for lease modifications?",
@@ -353,11 +328,6 @@ def main():
 
     Overall, the accounting treatment for lease modifications for lessees involves careful consideration 
     of the impact on the financial statements and compliance with ASC 842 requirements.
-    References:
-    •	EY Financial Reporting Developments Lease Accounting, pages 204-226
-    •	PWC Leases Guide, pages 182 - 225 
-    •	KPMG Leases Handbook, pages 567 - 609
-    •	ASC 842-10-25-8 to 25-14, 842-10-35-3 to 35-6
 
     For lessors, accounting for lease modifications involves several steps and considerations. When a lease 
     modification occurs, the lessor must first determine if the modified contract is still considered a 
@@ -378,11 +348,6 @@ def main():
     The accounting treatment for lease modifications will vary depending on whether the lease classification 
     changes and how it changes. It is essential for lessors to carefully evaluate each modification to ensure 
     compliance with ASC 842 guidelines.
-    References:
-    •	EY - Financial Reporting Developments: Lease Accounting, pages 281-298
-    •	PWC - Leases Guide, pages 226 - 241
-    •	KPMG - Leases Handbook, pages 709 - 735
-    •	ASC: 842-10-25-8 to 25-18, 842-10-35-3 to 35-6, 842-10-55-190 to 55-209
         }
     ]""")
 
@@ -432,7 +397,7 @@ def main():
     
     with tab1:
         st.write('This is a retrieval-assisted chatbot for lease accounting under US GAAP.')
-        st.markdown(f"**Disclaimer:** This assistant cannot give specific accounting advice. It is a learning tool and proof of concept. It is not intended for commercial use. Please note that page number references provided in the response are not currently accurate. For accounting advice, please consult an appropriate professional.")
+        st.markdown(f"**Disclaimer:** This assistant cannot give specific accounting advice. It is a learning tool and proof of concept. It is not intended for commercial use. Please note that any page number references provided in the response are not currently accurate. For accounting advice, please consult an appropriate professional.")
 
         st.divider()
         

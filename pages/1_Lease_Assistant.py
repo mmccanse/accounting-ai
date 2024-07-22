@@ -73,6 +73,7 @@ def setup_prompt_template():
 5.	Your responses will include examples and potential scenarios.  
 6.	If the answer is not available in the vector store source documents, the response will be "I can share general knowledge about lease accounting, but I cannot advise on specific scenarios, please seek guidance from a qualified expert." 
 7.	If the question is not on the topic of leases, respond by saying, "This is outside the scope of what I can help you with. Let's get back to lease accounting.
+8.  Your responses will not include page number references to the KPMG guidance or to the ASC guidance. Your page number references to date have been hallucinations and are not reliable.
  
     
 You will answer the input question based on the provided context:

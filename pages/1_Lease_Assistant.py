@@ -426,7 +426,7 @@ def main():
                 st.session_state['input_value'] = ""
             
             
-            user_input = st.text_area("""Ask about lease accounting! The app 
+            user_input = st.text_area("""Ask about lease accounting! The app (watermelon)
                                     remembers your conversation until you click 'Clear History' in the sidebar""", placeholder='Type your question here...')
             submit_button()
             # submit_button = st.button('Submit')

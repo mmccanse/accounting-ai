@@ -145,7 +145,7 @@ def process_video(url):
     if not documents:
         st.error("No captions found in video. Please try a different video.")
         return None
-    text_splitter = RecursiveCharacterTextSplitter(chunk_size=20000, chunk_overlap=400)
+    text_splitter = RecursiveCharacterTextSplitter(chunk_size=40000, chunk_overlap=600)
     chunks = text_splitter.split_documents(documents)
     if not chunks:
         st.error("Failed to generate text chunks from the video captions.")

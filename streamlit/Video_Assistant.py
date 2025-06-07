@@ -1,5 +1,4 @@
 
-
 import os
 import streamlit as st
 from langchain_openai import OpenAI, ChatOpenAI
@@ -8,6 +7,10 @@ from langchain_openai import OpenAIEmbeddings
 from langchain_community.vectorstores import FAISS
 from langchain.chains import RetrievalQA
 from langchain_community.document_loaders import YoutubeLoader
+from youtube_transcript_api import YouTubeTranscriptApi
+from youtube_transcript_api.proxies import WebshareProxyConfig
+from langchain.schema import Document
+import re
 from streamlit_extras.colored_header import colored_header
 from streamlit_extras.stylable_container import stylable_container
 
@@ -139,20 +142,63 @@ def reset_session_state(keys=None):
             if key in st.session_state:
                 del st.session_state[key]
 
+def fetch_youtube_transcript(url, proxy_user, proxy_pass, proxy_host, proxy_port):
+    # Extract the video ID from the URL
+    match = re.search(r"(?:v=|be/)([\w-]+)", url)
+    if not match:
+        st.error("Invalid YouTube URL")
+        return []
+    video_id = match.group(1)
+
+    # Set up the proxy string
+    proxy_url = f"http://{proxy_user}:{proxy_pass}@{proxy_host}:{proxy_port}"
+
+    # Pass proxies as dict
+    proxies = {"https": proxy_url}
+
+    try:
+        transcript = YouTubeTranscriptApi.get_transcript(video_id, proxies=proxies)
+        text = "\n".join([seg['text'] for seg in transcript])
+        doc = Document(page_content=text, metadata={'source': url})
+        return [doc]
+    except Exception as e:
+        st.error(f"Transcript retrieval failed: {e}")
+        return []
 def process_video(url):
-    loader = YoutubeLoader.from_youtube_url(url)
-    documents = loader.load()
+    # Fill in your proxy credentials (or pull from secrets for security!)
+    proxy_user = st.secrets["PROXY_USER"]
+    proxy_pass = st.secrets["PROXY_PASS"]
+    proxy_host = st.secrets["PROXY_HOST"]
+    proxy_port = st.secrets["PROXY_PORT"]
+
+    documents = fetch_youtube_transcript(url, proxy_user, proxy_pass, proxy_host, proxy_port)
     if not documents:
         st.error("No captions found in video. Please try a different video.")
         return None
+
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=40000, chunk_overlap=600)
     chunks = text_splitter.split_documents(documents)
     if not chunks:
         st.error("Failed to generate text chunks from the video captions.")
         return None
-    embedding = OpenAIEmbeddings(api_key=OPENAI_API_KEY, model = "text-embedding-ada-002")
+    embedding = OpenAIEmbeddings(api_key=OPENAI_API_KEY, model="text-embedding-ada-002")
     vector_store = FAISS.from_documents(chunks, embedding)
     return vector_store
+
+# def process_video(url):
+#     loader = YoutubeLoader.from_youtube_url(url)
+#     documents = loader.load()
+#     if not documents:
+#         st.error("No captions found in video. Please try a different video.")
+#         return None
+#     text_splitter = RecursiveCharacterTextSplitter(chunk_size=40000, chunk_overlap=600)
+#     chunks = text_splitter.split_documents(documents)
+#     if not chunks:
+#         st.error("Failed to generate text chunks from the video captions.")
+#         return None
+#     embedding = OpenAIEmbeddings(api_key=OPENAI_API_KEY, model = "text-embedding-ada-002")
+#     vector_store = FAISS.from_documents(chunks, embedding)
+#     return vector_store
 
 def process_question(vector_store, question):
     retriever = vector_store.as_retriever()

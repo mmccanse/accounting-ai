@@ -16,7 +16,7 @@ from streamlit_extras.stylable_container import stylable_container
 import logging
 logging.basicConfig(level=logging.DEBUG)
 
-# Set up Streamlit page configuration
+# Set up Streamlit page configuration-
 st.set_page_config(page_title=None,
                    page_icon=":dart:",
                    layout="wide",

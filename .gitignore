@@ -160,4 +160,4 @@ cython_debug/
 #.idea/
 
 # ignore .streamlit
-streamlit/.streamlit/secrets.toml
+.streamlit/secrets.toml

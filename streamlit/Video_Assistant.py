@@ -8,7 +8,7 @@ from langchain_community.vectorstores import FAISS
 from langchain.chains import RetrievalQA
 from langchain_community.document_loaders import YoutubeLoader
 from youtube_transcript_api import YouTubeTranscriptApi
-from youtube_transcript_api.proxies import WebshareProxyConfig
+# from youtube_transcript_api.proxies import WebshareProxyConfig
 from langchain.schema import Document
 import re
 from streamlit_extras.colored_header import colored_header

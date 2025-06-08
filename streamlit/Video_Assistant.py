@@ -14,7 +14,7 @@ import re
 from streamlit_extras.colored_header import colored_header
 from streamlit_extras.stylable_container import stylable_container
 
-# Set up Streamlit page configuration
+# Set up Streamlit page configuration-
 st.set_page_config(page_title=None,
                    page_icon=":cyclone:",
                    layout="centered",

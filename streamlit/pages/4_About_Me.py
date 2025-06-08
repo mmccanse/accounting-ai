@@ -24,8 +24,8 @@ def main():
     """, unsafe_allow_html=True)
     
     st.markdown('<h1 class="title">Created by Meredith McCanse</h1>', unsafe_allow_html=True)
-    st.markdown("GitHub documentation can be found here: [README](https://github.com/mmccanse/accounting-ai/blob/main/README.md)", unsafe_allow_html=True)
-    st.markdown("Main app code can be found here: [Video_Assistant.py](https://github.com/mmccanse/accounting-ai/blob/main/Video_Assistant.py) or through GitHub link at top right:", unsafe_allow_html=True)
+    st.markdown("GitHub documentation can be found here: [README](https://github.com/mmccanse/accounting-ai/blob/main/streamlit/README.md)", unsafe_allow_html=True)
+    st.markdown("Main app code can be found here: [Lease_Assistant.py](https://github.com/mmccanse/accounting-ai/blob/main/streamlit/Lease_Assistant.py) or through GitHub link at top right:", unsafe_allow_html=True)
     st.markdown("Connect with me on [LinkedIn](https://www.linkedin.com/in/meredithmccanse/)", unsafe_allow_html=True)
     st.divider()
     st.write("""

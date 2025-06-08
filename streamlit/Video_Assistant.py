@@ -151,13 +151,13 @@ def fetch_youtube_transcript(url, proxy_user, proxy_pass, proxy_host, proxy_port
     video_id = match.group(1)
 
     # Set up the proxy string
-    proxy_url = f"http://{proxy_user}:{proxy_pass}@{proxy_host}:{proxy_port}"
+    # proxy_url = f"http://{proxy_user}:{proxy_pass}@{proxy_host}:{proxy_port}"
 
     # Pass proxies as dict
-    proxies = {"https": proxy_url}
+    # proxies = {"https": proxy_url}
 
     try:
-        transcript = YouTubeTranscriptApi.get_transcript(video_id, proxies=proxies)
+        transcript = YouTubeTranscriptApi.get_transcript(video_id) #, proxies=proxies)
         text = "\n".join([seg['text'] for seg in transcript])
         doc = Document(page_content=text, metadata={'source': url})
         return [doc]

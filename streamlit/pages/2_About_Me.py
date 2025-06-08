@@ -28,9 +28,12 @@ def main():
     st.markdown("Main app code can be found here: [Video_Assistant.py](https://github.com/mmccanse/accounting-ai/blob/main/Video_Assistant.py) or through GitHub link at top right:", unsafe_allow_html=True)
     st.markdown("Connect with me on [LinkedIn](https://www.linkedin.com/in/meredithmccanse/)", unsafe_allow_html=True)
     st.divider()
-    st.write("""I am a passionate and energetic CPA with 8 years of accounting experience and many years of prior business, 
-             freelance, and life experience. I just completed a 6-month Artificial Intelligence bootcamp through 
-             the University of Denver. I'm confident that AI will drastically change the accounting landscape and am 
+    st.write("""
+             I am a passionate and energetic CPA with 9 years of accounting experience and many years of prior business, freelancing, and life experience. 
+             My strength is thinking through process improvements and using technology to build automation and streamline processes. 
+             I balance big picture perspectives and detail orientation to engage in team collaborations as well as the detail work of day-to-day 
+             operational accounting. Alteryx Designer Core certified, AI certificate from University of Denver bootcamp.
+             I'm confident that AI will drastically change the accounting landscape and am 
              excited to be part of this shift. My sweet spot is thinking through process improvements and using 
              technology to build automation and streamline processes. I balance big picture 
              perspectives and detail orientation to engage in team collaborations as well as the detail work of day-to-day 

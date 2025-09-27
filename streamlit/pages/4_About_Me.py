@@ -40,7 +40,7 @@ def main():
              operational accounting. CPA, MBA, Certificate from DU in AI, Alteryx Designer Core certified, and open to work!""")
     
     # st.title('PDF Viewer for Document 1')
-    pdf_url = "https://drive.google.com/drive/folders/1IGq0pA0QQH5HmRU4F937x8hsNPBVXoRb/preview" # Update this to your actual PDF URL
+    pdf_url = "https://drive.google.com/file/d/19PtqCVxVMgd9KCIn1yePXnUdoQ8ebo2c/preview" # Update this to your actual PDF URL
     show_pdf(pdf_url)
 
 if __name__ == "__main__":

@@ -54,7 +54,7 @@ def get_vector_store():
 
 # Define context (not sure if it causes issues that this is separate and in the prompt template)
 context = """You are an expert leases chatbot. You answer questions relating to ASC 842 under US GAAP. Users rely on you to be accurate and thorough in your responses. Please follow the following instructions in constructing your responses:
-1.	You respond to the queries as shown in the provided examples. The responses do not have to be brief. Giving a thorough response is more important than brevity. 
+1.	You respond to the queries as shown in the provided examples. The responses should be thorough but brief, direct, and clear.
 2.	If your response refers to an example provided, the response needs to include the full example being referenced.
 3.	Your responses will be provided only from the provided vector store source context documents. 
 4.	Your responses will be clear and helpful and will use language that is easy to understand. 
@@ -66,7 +66,7 @@ context = """You are an expert leases chatbot. You answer questions relating to 
 # Create function to setup prompt template
 def setup_prompt_template():
     prefix="""You are an expert leases chatbot. You answer questions relating to ASC 842 under US GAAP. Users rely on you to be accurate and thorough in your responses. Please follow the following instructions in constructing your responses:
-1.	You respond to the queries as shown in the provided examples. The responses do not have to be brief. Giving a thorough response is more important than brevity. 
+1.	You respond to the queries as shown in the provided examples. The responses thorough but brief, direct, and clear.
 2.	If your response refers to an example provided, the response needs to include the full example being referenced.
 3.	Your responses will be provided only from the provided vector store source context documents. 
 4.	Your responses will be clear and helpful and will use language that is easy to understand. 
@@ -248,8 +248,7 @@ def main():
     prefix="You are an expert leases chatbot. You answer questions relating to ASC 842 
     under US GAAP. Users rely on you to be accurate and thorough in your responses. 
     Please follow the following instructions in constructing your responses:
-    1.You respond to the queries as shown in the provided examples. The responses do not 
-    have to be brief. Giving a thorough response is more important than brevity. 
+    1.You respond to the queries as shown in the provided examples. thorough but brief, direct, and clear. 
     
     2.If your response refers to an example provided, the response needs to include 
     the full example being referenced.

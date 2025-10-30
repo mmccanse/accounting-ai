@@ -1,10 +1,12 @@
 streamlit
 streamlit_extras
-langchain
+langchain>=0.2.0,<0.3.0
 qdrant_client
 openai
 langchain_openai
 langchain-community
+langchain-core
+langchain-text-splitters
 python-dotenv
 tiktoken
 faiss-cpu
